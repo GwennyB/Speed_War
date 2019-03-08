@@ -1,7 +1,7 @@
 # Requirements
 
 ## Vision
- Tyrany of War is a "speed" War card game that pits the user(player) against the computer. It is designed to be a demonstration of SignalR.  
+ Tyranny of War is a "speed" War card game that pits the user(player) against the computer. It is designed to be a demonstration of SignalR.  
  The basic idea is upon start of the game the user and computer begin taking turns flipping cards from their deck into a discard pile. When matching cards are flipped up, the computer and player can "slap" the card pile. Whoever slaps first gets the cards in the pile. The next round begins with the winner flipping the top card of their deck. The game continues until either the player of the computer is out of cards.
 
 ## Scope
@@ -35,11 +35,11 @@
 
 ## Non-Functional Requirements
 - Testability -  Full Coverage tests of getters and setters, and crud capabilities.
-- Accessability - The application should be easy to use for everyone, including children. 
+- Accessibility - The application should be easy to use for everyone, including children. Font and buttons should be large, and easy to read and/or click. A user should be able to understand game play after playing through one game.
 
 ## Data-Flow
 - User lands on a start page. Upon clicking "Start" the user is directed to the game page.
-- Once the user lands on the game page, a deck is created and dealt between the user and computer.
+- Once the user lands on the game page, a deck is dealt between the user and computer.
 - To start game play, the user "flips" the top card of their deck. This triggers the computer to start listening for matches, and to begin flipping cards ever x seconds. 
 - As the user and computer flip cards, if a match of two cards appears, the user has the ability to "slap" the card. If the user slaps the card first, the discard deck is added to the player deck. After x seconds, if the player has not slapped the card, the computer will "slap" the deck and take the discard pile into it's deck.
 - The next round begins with the winner of the previous round flipping a card.
