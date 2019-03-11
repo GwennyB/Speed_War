@@ -18,12 +18,12 @@
 </head>
 
 <body>
-    <div>
         <form method="post">
+            <label asp-for="Username"></label>
+            <input asp-for="Username" />
+            <button type="submit">Start game!</button>
 
-            <div asp-validation-summary="All"></div>
-
-            @using (Html.BeginForm("Login", "User", FormMethod.Post))
+            @*@using (Html.BeginForm("Login", "User", FormMethod.Post))
 
             {
 
@@ -37,11 +37,10 @@
 
                 </p>
 
-            }
+            }*@
            @*// <button type="submit">start</button>*@
         </form>
 
-    </div>
 
 </body>
 </html>
