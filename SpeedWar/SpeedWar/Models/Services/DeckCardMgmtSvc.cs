@@ -89,6 +89,8 @@ namespace SpeedWar.Models.Services
             {
                 rnd = random.Next(0, cards.Count - 1);
                 await _context.DeckCards.AddAsync(new DeckCard() { CardID = cards[rnd].ID, DeckID = current.ID });
+                await _context.SaveChangesAsync();
+                DeckCard test = await _context.DeckCards.FirstOrDefaultAsync(c => c.CardID == cards[rnd].ID && c.DeckID == current.ID);
                 cards.Remove(cards[rnd]);
                 current = (current == player) ? computer : player;
             }
