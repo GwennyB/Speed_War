@@ -3,4 +3,45 @@
 @{
 }
 
-Hello World
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Page Title</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+    <div>
+        <form method="post">
+
+            <div asp-validation-summary="All"></div>
+
+            @using (Html.BeginForm("Login", "User", FormMethod.Post))
+
+            {
+
+                <p id="login">
+
+                    UserName: @Html.TextBox("UserName") <br />
+
+                    <input class="submitbtn" type="submit" value="start" />
+
+                    @ViewBag.Status
+
+                </p>
+
+            }
+           @*// <button type="submit">start</button>*@
+        </form>
+
+    </div>
+
+</body>
+</html>
