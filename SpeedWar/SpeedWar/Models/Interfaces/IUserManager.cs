@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SpeedWar.Models.Interfaces
 {
-    interface IUserManager
+    public interface IUserManager
     {
         Task<User> GetUserAsync(string name);
     }

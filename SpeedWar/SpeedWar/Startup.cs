@@ -35,6 +35,7 @@ namespace SpeedWar
                 options.UseSqlServer(Configuration.GetConnectionString("ProductionConnection")));
 
             services.AddScoped<IDeckCardManager, DeckCardMgmtSvc>();
+            services.AddScoped<IUserManager, UserMgmtSvc>();
 
         }
 
