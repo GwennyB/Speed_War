@@ -54,7 +54,7 @@ namespace SpeedWar
             app.UseCookiePolicy();
             app.UseSignalR(routes =>
             {
-                routes.MapHub<PlayHub>("/playhub");
+                routes.MapHub<PlayHub>("/PlayHub");
             });
         }
     }

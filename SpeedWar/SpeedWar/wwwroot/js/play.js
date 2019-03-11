@@ -1,6 +1,6 @@
 ﻿'use strict'
 
-var connection = new signalR.HubConnectionBuilder().withURL("/PlayHub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 
 document.getElementById("sendButton").disabled = true;
 
