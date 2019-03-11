@@ -8,8 +8,8 @@ namespace SpeedWar.Models.Interfaces
     interface IDeckCardManager
     {
         Task<List<DeckCard>> GetDeck(int userID);
-        Task<DeckCard> GetCard();
-        Task UpdateDeckCard();
+        Task<DeckCard> GetCard(int userID);
+        Task UpdateDeckCard(DeckCard deckCard);
 
     }
 }

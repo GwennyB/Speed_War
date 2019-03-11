@@ -24,14 +24,18 @@ namespace SpeedWar.Models.Services
             return cardDeck;
         }
 
-        public Task<DeckCard> GetCard()
+        public async Task<DeckCard> GetCard(int userID)
         {
-            throw new NotImplementedException();
+            List<DeckCard> cardDeck = await GetDeck(userID);
+            DeckCard deckCard = cardDeck.First();
+            return deckCard;
         }
 
-        public Task UpdateDeckCard()
+        public async Task UpdateDeckCard(DeckCard deckCard)
         {
-            throw new NotImplementedException();
+            _context.DeckCards.Update(deckCard);
+            await _context.SaveChangesAsync();
+
         }
     }
 }
