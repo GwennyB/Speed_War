@@ -1,4 +1,5 @@
-﻿using SpeedWar.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SpeedWar.Data;
 using SpeedWar.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,8 @@ namespace SpeedWar.Models.Services
 
         public async Task<List<DeckCard>> GetDeck(int userID, DeckType deckType)
         {
-            Deck deck = _context.Decks.FirstOrDefault(d => d.UserID == userID && d.DeckType == deckType);
-            List<DeckCard> cardDeckRaw = _context.DeckCards.ToList();
+            Deck deck = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == userID && d.DeckType == deckType);
+            List<DeckCard> cardDeckRaw = await _context.DeckCards.ToListAsync();
             List<DeckCard> cardDeck = cardDeckRaw.Where(d => d.DeckID == deck.ID).ToList();
             return cardDeck;
         }
@@ -35,7 +36,29 @@ namespace SpeedWar.Models.Services
         {
             _context.DeckCards.Update(deckCard);
             await _context.SaveChangesAsync();
-
         }
+
+        public async Task<List<Card>> GetAllCardsAsync()
+        {
+            return await _context.Cards.ToListAsync<Card>();
+        }
+
+        public async Task DealGameAsync(int ID /*, int ID2 */) // de-comment to add 2nd player
+        {
+            List<Card> cards = await GetAllCardsAsync();
+            Random random = new Random();
+            int rnd;
+            Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
+            Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 1 && d.DeckType == DeckType.Play);
+            Deck current = player;
+            while (cards.Count > 0)
+            {
+                rnd = random.Next(0, cards.Count - 1);
+                await _context.DeckCards.AddAsync(new DeckCard() { CardID = cards[rnd].ID, DeckID = current.ID });
+                cards.Remove(cards[rnd]);
+                current = (current == player) ? computer : player;
+            }
+        }
+
     }
 }
