@@ -31,15 +31,37 @@ namespace SpeedWar.Pages.Play
         public async void OnPostFlip(int userID)
         {
             DeckCard deckCard = await _deckCardContext.GetCard(userID);
-            deckCard.DeckID = 1;
-            await _deckCardContext.UpdateDeckCard(deckCard);
+            if (deckCard != null)
+            {
+                deckCard.DeckID = 1;
+                await _deckCardContext.UpdateDeckCard(deckCard);
+            }
+            else
+            {
+                EndGame("Computer");
+            }
         }
 
+        /// <summary>
+        /// Find's the first card in the computer's deck. Changes that cards location to the discard pile. Updates the card.
+        /// </summary>
         public async void ComputerFlip()
         {
             DeckCard deckCard = await _deckCardContext.GetCard(2);
-            deckCard.DeckID = 1;
-            await _deckCardContext.UpdateDeckCard(deckCard);
+            if (deckCard != null)
+            {
+                deckCard.DeckID = 1;
+                await _deckCardContext.UpdateDeckCard(deckCard);
+            }
+            else
+            {
+                EndGame("Computer");
+            }
+        }
+
+        private void EndGame(string v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
