@@ -26,8 +26,7 @@ namespace SpeedWar.Models.Services
         public async Task<List<DeckCard>> GetDeck(int userID, DeckType deckType)
         {
             Deck deck = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == userID && d.DeckType == deckType);
-            List<DeckCard> cardDeckRaw = await _context.DeckCards.ToListAsync();
-            List<DeckCard> cardDeck = cardDeckRaw.Where(d => d.DeckID == deck.ID).ToList();
+            List<DeckCard> cardDeck = await _context.DeckCards.Where(d => d.DeckID == deck.ID).ToListAsync();
             return cardDeck;
         }
 
@@ -55,8 +54,12 @@ namespace SpeedWar.Models.Services
         public async Task UpdateDeckCard(DeckCard deckCard)
         {
             DeckCard query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == deckCard.CardID);
-            query.DeckID = deckCard.DeckID;
-            _context.DeckCards.Update(query);
+            if(query != null)
+            {
+                _context.DeckCards.Remove(query);
+                await _context.SaveChangesAsync();
+            }
+            await _context.DeckCards.AddAsync(deckCard);
             await _context.SaveChangesAsync();
         }
 
