@@ -12,24 +12,40 @@ namespace SpeedWar.Pages.Play
     public class IndexModel : PageModel
     {
         private IDeckCardManager _deckCardContext;
-        
+
+        [BindProperty]
+        public User Player { get; set; }
+        public bool GameStart { get; set; }
+
 
         public IndexModel(IDeckCardManager deckCardManager)
         {
             _deckCardContext = deckCardManager;
+            GameStart = true;
         }
 
-
-        public void OnGet()
+        
+        public async void OnGet()
         {
+            if (GameStart == true)
+            {
+                await _deckCardContext.DealGameAsync(Player.ID);
+            }
         }
 
         /// <summary>
         /// Takes in the player's user ID. Find's the first card in that player's deck. Changes that card's location to the discard pile. Updates the card. If card is null, calls EndGame method. 
         /// </summary>
         /// <param name="userID">the id of the user playing</param>
-        public async void OnPost(int userID)
+        public async void OnPost()
         {
+            GameStart = false;
+            int userID = Player.ID;
+            var check = await _deckCardContext.GetDeck(userID, DeckType.Play);
+            if (check.Count == 0)
+            {
+                EndGame("Computer");
+            }
             DeckCard deckCard = await _deckCardContext.GetCard(userID, DeckType.Play);
             if (deckCard != null)
             {
