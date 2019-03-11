@@ -7,5 +7,9 @@ namespace SpeedWar.Models.Interfaces
 {
     interface IDeckCardManager
     {
+        Task<Stack<DeckCard>> GetDeck();
+        Task<DeckCard> GetCard();
+        Task UpdateDeckCard();
+
     }
 }
