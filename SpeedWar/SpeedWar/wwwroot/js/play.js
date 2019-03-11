@@ -25,7 +25,7 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    connection.Invoke("SendMessage", deck).catch(function (err) {
+    connection.Invoke("SendMessage").catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
