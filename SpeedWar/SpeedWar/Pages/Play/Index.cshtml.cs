@@ -23,9 +23,9 @@ namespace SpeedWar.Pages.Play
         public void OnGet()
         {
         }
-        
+
         /// <summary>
-        /// Takes in the player's user ID. Find's the first card in that player's deck. Changes that card's location to the discard pile. Updates the card.
+        /// Takes in the player's user ID. Find's the first card in that player's deck. Changes that card's location to the discard pile. Updates the card. If card is null, calls EndGame method. 
         /// </summary>
         /// <param name="userID">the id of the user playing</param>
         public async void OnPostFlip(int userID)
@@ -43,7 +43,7 @@ namespace SpeedWar.Pages.Play
         }
 
         /// <summary>
-        /// Find's the first card in the computer's deck. Changes that cards location to the discard pile. Updates the card.
+        /// Find's the first card in the computer's deck. Changes that cards location to the discard pile. Updates the card. If card is null, calls EndGame method. 
         /// </summary>
         public async void ComputerFlip()
         {
@@ -55,7 +55,7 @@ namespace SpeedWar.Pages.Play
             }
             else
             {
-                EndGame("Computer");
+                EndGame("User");
             }
         }
 
