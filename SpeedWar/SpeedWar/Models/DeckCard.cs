@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SpeedWar.Models
 {
-    public class Location
+    public class DeckCard
     {
         public int CardID { get; set; }
         public int DeckID { get; set; }
