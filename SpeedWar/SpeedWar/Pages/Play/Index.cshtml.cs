@@ -41,7 +41,7 @@ namespace SpeedWar.Pages.Play
         {
             GameStart = false;
             int userID = Player.ID;
-            var check = await _deckCardContext.GetDeck(userID, DeckType.Play);
+            List<DeckCard> check = await _deckCardContext.GetDeck(userID, DeckType.Play);
             if (check.Count == 0)
             {
                 EndGame("Computer");

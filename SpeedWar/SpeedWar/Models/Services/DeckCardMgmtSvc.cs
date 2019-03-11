@@ -92,6 +92,7 @@ namespace SpeedWar.Models.Services
                 cards.Remove(cards[rnd]);
                 current = (current == player) ? computer : player;
             }
+            await _context.SaveChangesAsync();
         }
 
     }
