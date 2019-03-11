@@ -25,11 +25,11 @@ namespace SpeedWar.Pages.Play
         }
 
         
-        public async void OnGet()
+        public async Task OnGet(User Player)
         {
             if (GameStart == true)
             {
-                //await _deckCardContext.DealGameAsync(Player.ID);
+                await _deckCardContext.DealGameAsync(Player.ID);
             }
         }
 
@@ -37,7 +37,7 @@ namespace SpeedWar.Pages.Play
         /// Takes in the player's user ID. Find's the first card in that player's deck. Changes that card's location to the discard pile. Updates the card. If card is null, calls EndGame method. 
         /// </summary>
         /// <param name="userID">the id of the user playing</param>
-        public async void OnPost()
+        public async Task OnPost()
         {
             GameStart = false;
             int userID = Player.ID;
@@ -61,7 +61,7 @@ namespace SpeedWar.Pages.Play
         /// <summary>
         /// Find's the first card in the computer's deck. Changes that cards location to the discard pile. Updates the card. If card is null, calls EndGame method. 
         /// </summary>
-        public async void ComputerFlip()
+        public async Task ComputerFlip()
         {
             var check = await _deckCardContext.GetDeck(2, DeckType.Play);
             if (check.Count == 0)

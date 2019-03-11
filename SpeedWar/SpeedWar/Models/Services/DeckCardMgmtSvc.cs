@@ -66,7 +66,7 @@ namespace SpeedWar.Models.Services
         /// <returns> list of all cards </returns>
         public async Task<List<Card>> GetAllCardsAsync()
         {
-            return await _context.Cards.ToListAsync<Card>();
+            return await _context.Cards.ToListAsync();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace SpeedWar.Models.Services
             Random random = new Random();
             int rnd;
             Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
-            Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 1 && d.DeckType == DeckType.Play);
+            Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Play);
             Deck current = player;
             while (cards.Count > 0)
             {
