@@ -63,16 +63,14 @@ namespace SpeedWar.Pages.Play
         /// </summary>
         public async void ComputerFlip()
         {
+            var check = await _deckCardContext.GetDeck(2, DeckType.Play);
+            if (check.Count == 0)
+            {
+                EndGame("Player");
+            }
             DeckCard deckCard = await _deckCardContext.GetCard(2, DeckType.Play);
-            if (deckCard != null)
-            {
-                deckCard.DeckID = 1;
-                await _deckCardContext.UpdateDeckCard(deckCard);
-            }
-            else
-            {
-                EndGame("User");
-            }
+            deckCard.DeckID = 1;
+            await _deckCardContext.UpdateDeckCard(deckCard);
         }
 
         private void EndGame(string v)
