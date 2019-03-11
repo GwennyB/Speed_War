@@ -17,7 +17,7 @@ namespace SpeedWar.Hubs
             _deckCardManager = deckCardManager;
         }
         //TO-DO: Scaffold PlayHub
-        public async Task SendMessage(Deck deck)
+        public async Task SendMessage()
         {
             List<DeckCard> discard = await _deckCardManager.GetDeck(1, DeckType.Discard);
             DeckCard deckCard1 = discard[discard.Count - 1];
