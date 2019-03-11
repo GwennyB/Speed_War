@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SpeedWar.Data;
+using SpeedWar.Hubs;
 
 namespace SpeedWar
 {
@@ -27,7 +28,7 @@ namespace SpeedWar
         {
 
             services.AddMvc();
-
+            services.AddSignalR();
             services.AddDbContext<CardDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ProductionConnection")));
 
@@ -46,6 +47,11 @@ namespace SpeedWar
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseMvc();
+            app.UseCookiePolicy();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<PlayHub>("/playhub");
+            });
         }
     }
 }
