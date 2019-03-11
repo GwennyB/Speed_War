@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 namespace SpeedWar.Models.Interfaces
 {
-    interface IDeckCardManager
+    public interface IDeckCardManager
     {
+        Task<List<DeckCard>> GetDeck(int userID, DeckType deckType);
+        Task<DeckCard> GetCard(int userID, DeckType deckType);
+        Task UpdateDeckCard(DeckCard deckCard);
+
     }
 }
