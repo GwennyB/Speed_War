@@ -34,5 +34,12 @@ namespace SpeedWar.Pages.Play
             deckCard.DeckID = 1;
             await _deckCardContext.UpdateDeckCard(deckCard);
         }
+
+        public async void ComputerFlip()
+        {
+            DeckCard deckCard = await _deckCardContext.GetCard(2);
+            deckCard.DeckID = 1;
+            await _deckCardContext.UpdateDeckCard(deckCard);
+        }
     }
 }
