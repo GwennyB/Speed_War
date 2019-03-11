@@ -7,5 +7,6 @@ namespace SpeedWar.Models.Interfaces
 {
     interface IUserManager
     {
+
     }
 }

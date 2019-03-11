@@ -19,9 +19,27 @@
 
 <body>
     <div>
-    <form method="get">
-        <button type="submit" asp-page="play/Index">Start</button>
-    </form>
+        <form method="post">
+
+            <div asp-validation-summary="All"></div>
+
+            @using (Html.BeginForm("Login", "User", FormMethod.Post))
+
+            {
+
+                <p id="login">
+
+                    UserName: @Html.TextBox("UserName") <br />
+
+                    <input class="submitbtn" type="submit" value="start" />
+
+                    @ViewBag.Status
+
+                </p>
+
+            }
+           @*// <button type="submit">start</button>*@
+        </form>
 
     </div>
 
