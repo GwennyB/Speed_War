@@ -29,7 +29,7 @@ namespace SpeedWar.Pages.Play
         {
             if (GameStart == true)
             {
-                await _deckCardContext.DealGameAsync(Player.ID);
+                //await _deckCardContext.DealGameAsync(Player.ID);
             }
         }
 
