@@ -15,5 +15,23 @@ namespace SpeedWar.Models.Services
         {
             _context = context;
         }
+
+        public async Task<List<DeckCard>> GetDeck(int userID)
+        {
+            Deck deck = _context.Decks.FirstOrDefault(d => d.UserID == userID);
+            List<DeckCard> cardDeckRaw = _context.DeckCards.ToList();
+            List<DeckCard> cardDeck = cardDeckRaw.Where(d => d.DeckID == deck.ID).ToList();
+            return cardDeck;
+        }
+
+        public Task<DeckCard> GetCard()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateDeckCard()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
