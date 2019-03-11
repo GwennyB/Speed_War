@@ -17,6 +17,12 @@ namespace SpeedWar.Models.Services
             _context = context;
         }
 
+        /// <summary>
+        /// collects and returns a specified deck as a list
+        /// </summary>
+        /// <param name="userID"> deck owner's ID </param>
+        /// <param name="deckType"> deck type (ie - 'play', 'collect', 'discard' </param>
+        /// <returns> card deck, formatted as list </returns>
         public async Task<List<DeckCard>> GetDeck(int userID, DeckType deckType)
         {
             Deck deck = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == userID && d.DeckType == deckType);
@@ -25,24 +31,49 @@ namespace SpeedWar.Models.Services
             return cardDeck;
         }
 
+        /// <summary>
+        /// returns a random card from specified deck
+        /// simulates returning top card from a shuffled deck
+        /// </summary>
+        /// <param name="userID"> deck owner's ID </param>
+        /// <param name="deckType"> deck type (ie - 'play', 'collect', 'discard' </param>
+        /// <returns> randomly selected card from specified deck </returns>
         public async Task<DeckCard> GetCard(int userID, DeckType deckType)
         {
             List<DeckCard> cardDeck = await GetDeck(userID, deckType);
-            DeckCard deckCard = cardDeck.First();
+            Random random = new Random();
+            int rnd = random.Next(0, cardDeck.Count - 1);
+            DeckCard deckCard = cardDeck[rnd];
             return deckCard;
         }
 
+        /// <summary>
+        /// updates the deck-location of a card
+        /// </summary>
+        /// <param name="deckCard"> new card-deck assignment </param>
+        /// <returns> completed task </returns>
         public async Task UpdateDeckCard(DeckCard deckCard)
         {
-            _context.DeckCards.Update(deckCard);
+            DeckCard query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == deckCard.CardID);
+            query.DeckID = deckCard.DeckID;
+            _context.DeckCards.Update(query);
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// gets all cards and returns as a list
+        /// </summary>
+        /// <returns> list of all cards </returns>
         public async Task<List<Card>> GetAllCardsAsync()
         {
             return await _context.Cards.ToListAsync<Card>();
         }
 
+        /// <summary>
+        /// 'deals' a new game by splitting all cards randomly between player and computer
+        /// </summary>
+        /// <param name="ID"> player's UserID </param>
+        /// <returns> task completed </returns>
         public async Task DealGameAsync(int ID /*, int ID2 */) // de-comment to add 2nd player
         {
             List<Card> cards = await GetAllCardsAsync();
