@@ -30,7 +30,7 @@ namespace SpeedWar.Pages.Play
         /// <param name="userID">the id of the user playing</param>
         public async void OnPostFlip(int userID)
         {
-            DeckCard deckCard = await _deckCardContext.GetCard(userID);
+            DeckCard deckCard = await _deckCardContext.GetCard(userID, DeckType.Play);
             if (deckCard != null)
             {
                 deckCard.DeckID = 1;
@@ -47,7 +47,7 @@ namespace SpeedWar.Pages.Play
         /// </summary>
         public async void ComputerFlip()
         {
-            DeckCard deckCard = await _deckCardContext.GetCard(2);
+            DeckCard deckCard = await _deckCardContext.GetCard(2, DeckType.Play);
             if (deckCard != null)
             {
                 deckCard.DeckID = 1;

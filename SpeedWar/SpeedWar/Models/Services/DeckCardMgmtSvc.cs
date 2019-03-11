@@ -16,17 +16,17 @@ namespace SpeedWar.Models.Services
             _context = context;
         }
 
-        public async Task<List<DeckCard>> GetDeck(int userID)
+        public async Task<List<DeckCard>> GetDeck(int userID, DeckType deckType)
         {
-            Deck deck = _context.Decks.FirstOrDefault(d => d.UserID == userID);
+            Deck deck = _context.Decks.FirstOrDefault(d => d.UserID == userID && d.DeckType == deckType);
             List<DeckCard> cardDeckRaw = _context.DeckCards.ToList();
             List<DeckCard> cardDeck = cardDeckRaw.Where(d => d.DeckID == deck.ID).ToList();
             return cardDeck;
         }
 
-        public async Task<DeckCard> GetCard(int userID)
+        public async Task<DeckCard> GetCard(int userID, DeckType deckType)
         {
-            List<DeckCard> cardDeck = await GetDeck(userID);
+            List<DeckCard> cardDeck = await GetDeck(userID, deckType);
             DeckCard deckCard = cardDeck.First();
             return deckCard;
         }
