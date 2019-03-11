@@ -28,7 +28,7 @@ namespace SpeedWar.Pages.Play
         /// Takes in the player's user ID. Find's the first card in that player's deck. Changes that card's location to the discard pile. Updates the card. If card is null, calls EndGame method. 
         /// </summary>
         /// <param name="userID">the id of the user playing</param>
-        public async void OnPostFlip(int userID)
+        public async void OnPost(int userID)
         {
             DeckCard deckCard = await _deckCardContext.GetCard(userID, DeckType.Play);
             if (deckCard != null)
