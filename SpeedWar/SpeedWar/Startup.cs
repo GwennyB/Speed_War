@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SpeedWar.Data;
 using SpeedWar.Hubs;
+using SpeedWar.Models.Interfaces;
+using SpeedWar.Models.Services;
 
 namespace SpeedWar
 {
@@ -31,6 +33,8 @@ namespace SpeedWar
             services.AddSignalR();
             services.AddDbContext<CardDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ProductionConnection")));
+
+            services.AddScoped<IDeckCardManager, DeckCardMgmtSvc>();
 
         }
 
