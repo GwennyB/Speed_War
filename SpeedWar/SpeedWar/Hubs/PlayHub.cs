@@ -9,9 +9,9 @@ namespace SpeedWar.Hubs
     public class PlayHub : Hub
     {
         //TO-DO: Scaffold PlayHub
-        public async Task PlayCard(Card card)
-        {
-            await Clients.All.SendAsync("recieve message", card);
-        }
+        //public async Task PlayCard(Card card)
+        //{
+        //    await Clients.All.SendAsync("recieve message", card);
+        //}
     }
 }
