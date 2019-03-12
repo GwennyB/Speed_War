@@ -120,8 +120,7 @@ namespace UnitTests
                 await context.DeckCards.AddAsync(card1);
                 await context.SaveChangesAsync();
 
-                DeckCard card2 = new DeckCard() { CardID = card1.CardID, DeckID = 2 };
-                await svc.UpdateDeckCard(card2);
+                await svc.UpdateDeckCard(card1.CardID, card1.DeckID, 2);
 
                 var query = await context.DeckCards.FirstOrDefaultAsync(d => d.CardID == 1);
 
@@ -177,8 +176,10 @@ namespace UnitTests
                 await context.Cards.AddAsync(card4);
                 Deck deck1 = new Deck() { ID = 1, UserID = 10, DeckType = DeckType.Play };
                 Deck deck2 = new Deck() { ID = 2, UserID = 2, DeckType = DeckType.Play };
+                Deck discard = new Deck() { ID = 3, UserID = 1, DeckType = DeckType.Discard };
                 await context.Decks.AddAsync(deck1);
                 await context.Decks.AddAsync(deck2);
+                await context.Decks.AddAsync(discard);
                 await context.SaveChangesAsync();
 
 
