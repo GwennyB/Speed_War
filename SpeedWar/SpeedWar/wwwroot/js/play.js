@@ -6,7 +6,7 @@ document.getElementById("sendButton").disabled = true;
 
 connection.on("Recieve Card", function (card1Rank, card1Suit, card2Rank, card2Suit) {
     var firstChild = document.getElementById("first-card");
-    var secondChild = document.GetElementByID("second-card");
+    var secondChild = document.getElementById("second-card");
     var card1 = card1Rank + card1Suit;
     var card2 = card2Rank + card2Suit;
     var card1Element = document.createElement("span");
