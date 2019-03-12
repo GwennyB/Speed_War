@@ -1,9 +1,11 @@
 ﻿'use strict'
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
-
+var player = document.getElementById("player").textContent;
+connection.invoke("Intro", player);
 
 document.getElementById("sendButton").disabled = true;
+
 
 connection.on("RecieveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
     console.log(card1Rank);
@@ -31,10 +33,11 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
+    var userName = document.getElementById("player").textContent;
     var secondRank = document.getElementById("li1").textContent;
     var secondSuit = document.getElementById("li2").textContent;
     console.log(secondSuit);
-    connection.invoke("PlayerFlip", secondRank, secondSuit).catch(function (err) {
+    connection.invoke("PlayerFlip", secondRank, secondSuit, userName).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
