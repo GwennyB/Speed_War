@@ -7,7 +7,6 @@ namespace SpeedWar.Models.Interfaces
 {
     public interface IUserManager
     {
-        string CurrentUserName { get; set; }
         Task<User> GetUserAsync(string name);
     }
 }

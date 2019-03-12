@@ -29,9 +29,8 @@ namespace SpeedWar.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            _user.CurrentUserName = Username;
             Player = await _user.GetUserAsync(Username);
-            return RedirectToPage("/Play/Index", Player);
+            return RedirectToPage("/Play/Index",Player);
         }
     }
 }

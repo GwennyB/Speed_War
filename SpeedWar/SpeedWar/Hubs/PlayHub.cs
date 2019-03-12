@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SpeedWar.Models;
 using SpeedWar.Models.Interfaces;
+using SpeedWar.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,10 @@ namespace SpeedWar.Hubs
 
         public bool PlayerTurn { get; set; }
         public User CurrentUser { get; set; }
-        public DeckCard FirstCard { get; set; }
-        public DeckCard SecondCard { get; set; }
+        public Card FirstCard { get; set; }
+        public Card SecondCard { get; set; }
+
+
 
         public PlayHub(IDeckCardManager deckCardManager, IUserManager userManager)
         {
@@ -25,40 +28,45 @@ namespace SpeedWar.Hubs
             PlayerTurn = true;
         }
 
-        public async Task<User> GetCurrentUser()
+        public async Task Intro(string username)
         {
-            CurrentUser = await _userManager.GetUserAsync(_userManager.CurrentUserName);
-            return CurrentUser;
+            CurrentUser = await _userManager.GetUserAsync(username);
         }
+
+
+
+
         //TO-DO: Scaffold PlayHub
-        public async Task SendCard()
+        public async Task SendCard(string card1Rank, string card1Suit, string card2Rank, string card2Suit)
         {
-            List<DeckCard> discard = await _deckCardManager.GetDeck(1, DeckType.Discard);
-            DeckCard deckCard1 = discard[discard.Count - 1];
-            DeckCard deckCard2 = discard[discard.Count - 2];
-            Card card1 = deckCard1.Card;
-            Card card2 = deckCard2.Card;
-            var card1Rank = card1.Rank;
-            var card1Suit = card1.Suit;
-            var card2Rank = card2.Rank;
-            var card2Suit = card2.Suit;
-            await Clients.All.SendAsync("Recieve Card", card1Rank, card1Suit, card2Rank, card2Suit);
+            await Clients.All.SendAsync("RecieveCard", card1Rank, card1Suit, card2Rank, card2Suit);
         }
 
         public async Task ComputerFlip()
         {
             while (PlayerTurn == false)
             {
-
-                await Task.Delay(50);
-                await _deckCardManager.Flip(2);
+                SecondCard = FirstCard;
+                FirstCard = await _deckCardManager.Flip(2);
+                await SendCard(FirstCard.Rank.ToString(), FirstCard.Suit.ToString(), SecondCard.Rank.ToString(), SecondCard.Suit.ToString());
             }
         }
 
-        public async Task PlayerFlip()
+        public async Task PlayerFlip(string secondRank, string secondSuit)
         {
-            User user = await GetCurrentUser();
-            await _deckCardManager.Flip(user.ID);
+            FirstCard = await _deckCardManager.Flip(CurrentUser.ID);
+
+            string card1Rank = "null";
+            string card1Suit = "null";
+            if (FirstCard != null)
+            {
+                card1Rank = FirstCard.Rank.ToString();
+                card1Suit = FirstCard.Suit.ToString();
+            }
+
+            string card2Rank = secondRank;
+            string card2Suit = secondSuit;
+            await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
         }
     }
 }
