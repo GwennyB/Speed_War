@@ -52,9 +52,10 @@ namespace SpeedWar.Hubs
             }
         }
 
-        public async Task PlayerFlip(string secondRank, string secondSuit)
+        public async Task PlayerFlip(string secondRank, string secondSuit, string userName)
         {
-            FirstCard = await _deckCardManager.Flip(CurrentUser.ID);
+            User user = await _userManager.GetUserAsync(userName);
+            FirstCard = await _deckCardManager.Flip(user.ID);
 
             string card1Rank = "null";
             string card1Suit = "null";
