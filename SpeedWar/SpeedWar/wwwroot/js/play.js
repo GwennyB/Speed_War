@@ -4,7 +4,7 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 
 document.getElementById("sendButton").disabled = true;
 
-connection.on("recieve message", function (card1Rank, card1Suit, card2Rank, card2Suit) {
+connection.on("Recieve Card", function (card1Rank, card1Suit, card2Rank, card2Suit) {
     var firstChild = document.getElementById("first-card");
     var secondChild = document.GetElementByID("second-card");
     var card1 = card1Rank + card1Suit;
@@ -25,7 +25,7 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    connection.Invoke("SendMessage").catch(function (err) {
+    connection.Invoke("SendCard").catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
