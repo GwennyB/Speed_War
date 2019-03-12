@@ -4,18 +4,21 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 
 document.getElementById("sendButton").disabled = true;
 
-connection.on("Recieve Card", function (card1Rank, card1Suit, card2Rank, card2Suit) {
-    var firstChild = document.getElementById("first-card");
-    var secondChild = document.getElementById("second-card");
-    var card1 = card1Rank + card1Suit;
-    var card2 = card2Rank + card2Suit;
-    var card1Element = document.createElement("span");
-    card1Element.textContent(card1);
-    var card2Element = document.createElement("span");
-    card2Element.textContent(card2);
+connection.on("RecieveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
+    console.log(card1Rank);
+    var li1 = document.createElement("li");
+    var li2 = document.createElement("li");
 
-    firstChild.appendChild(card1Element);
-    secondChild.appendChild(card2Element);
+    li1.textContent = card1Rank
+    li2.textContent = card2Rank
+
+    var li3 = document.createElement("li");
+    var li4 = document.createElement("li");
+
+    li3.textContent = card1Suit
+    li4.textContent = card2Suit
+    document.getElementById("first-card").appendChild(li1)
+    document.getElementById("second-card").appendChild(li2)
 })
 
 connection.start().then(function () {
@@ -25,8 +28,12 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    connection.Invoke("SendCard").catch(function (err) {
+
+
+    connection.invoke("PlayerFlip").catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
+
+
 });
