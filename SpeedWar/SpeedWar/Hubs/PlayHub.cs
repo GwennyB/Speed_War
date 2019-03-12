@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SpeedWar.Models;
 using SpeedWar.Models.Interfaces;
+using SpeedWar.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,9 @@ namespace SpeedWar.Hubs
         public Card FirstCard { get; set; }
         public Card SecondCard { get; set; }
 
-        public PlayHub(IDeckCardManager deckCardManager, User player)
+        public PlayHub(IDeckCardManager deckCardManager)
         {
             _deckCardManager = deckCardManager;
-            CurrentUser = player;
             PlayerTurn = true;
         }
 
@@ -41,10 +41,8 @@ namespace SpeedWar.Hubs
             }
         }
 
-        public async Task PlayerFlip()
+        public async Task PlayerFlip(string secondRank, string secondSuit)
         {
-            
-            SecondCard = FirstCard;
             FirstCard = await _deckCardManager.Flip(3);
 
             string card1Rank = "null";
@@ -54,14 +52,9 @@ namespace SpeedWar.Hubs
                 card1Rank = FirstCard.Rank.ToString();
                 card1Suit = FirstCard.Suit.ToString();
             }
-            
-            string card2Rank = "";
-            string card2Suit = "";            
-            if (SecondCard != null)
-            {
-                card2Rank = SecondCard.Rank.ToString();
-                card2Suit = SecondCard.Suit.ToString();
-            } 
+
+            string card2Rank = secondRank;
+            string card2Suit = secondSuit;
             await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
         }
     }
