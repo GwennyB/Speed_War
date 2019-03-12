@@ -179,5 +179,23 @@ namespace SpeedWar.Models.Services
             }
         }
 
+        /// <summary>
+        /// checks to see whether either user has run out of cards and declares the other user as winner
+        /// </summary>
+        /// <param name="user"> client player </param>
+        /// <returns> user declared 'winner', or null if game continues </returns>
+        public async Task<User> CheckWinner(User user)
+        {
+            List<DeckCard> playUser = await GetDeck(user.ID, DeckType.Play);
+            List<DeckCard> collectUser = await GetDeck(user.ID, DeckType.Collect);
+            List<DeckCard> playComp = await GetDeck(2, DeckType.Play);
+            List<DeckCard> collectComp = await GetDeck(2, DeckType.Collect);
+            User comp = await _context.Users.FindAsync(2);
+            if ( playComp.Count == 0 && collectComp.Count == 0)
+            { return user; };
+            if (playUser.Count == 0 && collectUser.Count == 0)
+            { return comp; };
+            return null;
+        }
     }
 }
