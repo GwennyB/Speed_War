@@ -38,39 +38,9 @@ namespace SpeedWar.Pages.Play
         /// <param name="userID">the id of the user playing</param>
         public async Task OnPost()
         {
-            GameStart = false;
-            int userID = Player.ID;
-            List<DeckCard> check = await _deckCardContext.GetDeck(userID, DeckType.Play);
-            if (check.Count == 0)
-            {
-                EndGame("Computer");
-            }
-            DeckCard deckCard = await _deckCardContext.GetCard(userID, DeckType.Play);
-            if (deckCard != null)
-            {
-                deckCard.DeckID = 1;
-                await _deckCardContext.UpdateDeckCard(deckCard);
-            }
-            else
-            {
-                EndGame("Computer");
-            }
+
         }
 
-        /// <summary>
-        /// Find's the first card in the computer's deck. Changes that cards location to the discard pile. Updates the card. If card is null, calls EndGame method. 
-        /// </summary>
-        public async Task ComputerFlip()
-        {
-            var check = await _deckCardContext.GetDeck(2, DeckType.Play);
-            if (check.Count == 0)
-            {
-                EndGame("Player");
-            }
-            DeckCard deckCard = await _deckCardContext.GetCard(2, DeckType.Play);
-            deckCard.DeckID = 1;
-            await _deckCardContext.UpdateDeckCard(deckCard);
-        }
 
         private void EndGame(string v)
         {

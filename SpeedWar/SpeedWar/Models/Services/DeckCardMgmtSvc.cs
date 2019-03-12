@@ -10,7 +10,7 @@ namespace SpeedWar.Models.Services
 {
     public class DeckCardMgmtSvc : IDeckCardManager
     {
-        private CardDbContext _context { get; }
+        private CardDbContext _context;
 
         public DeckCardMgmtSvc(CardDbContext context)
         {
@@ -51,15 +51,19 @@ namespace SpeedWar.Models.Services
         /// </summary>
         /// <param name="deckCard"> new card-deck assignment </param>
         /// <returns> completed task </returns>
-        public async Task UpdateDeckCard(DeckCard deckCard)
+        public async Task UpdateDeckCard(int cardID, int oldDeckID, int newDeckID)
         {
-            DeckCard query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == deckCard.CardID && d.DeckID != deckCard.DeckID);
-            if(query != null)
+            DeckCard deckCard = new DeckCard()
             {
-                _context.DeckCards.Remove(query);
-            }
+                CardID = cardID,
+                DeckID = newDeckID
+            };
             await _context.DeckCards.AddAsync(deckCard);
             await _context.SaveChangesAsync();
+            DeckCard oldCard = await _context.DeckCards.FirstOrDefaultAsync(c => c.DeckID == oldDeckID && c.CardID == cardID);
+            _context.DeckCards.Remove(oldCard);
+            await _context.SaveChangesAsync();
+                    
         }
 
         /// <summary>
@@ -83,8 +87,11 @@ namespace SpeedWar.Models.Services
             int rnd;
             Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
             Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Play);
+            Deck discard = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 1 && d.DeckType == DeckType.Discard);
             await CleanDeck(player);
             await CleanDeck(computer);
+            await CleanDeck(discard);
+            
             Deck current = player;
             while (cards.Count > 0)
             {
@@ -136,8 +143,8 @@ namespace SpeedWar.Models.Services
                 EndGame(ID);
             }
             DeckCard deckCard = await GetCard(ID, DeckType.Play);
-            deckCard.DeckID = 1;
-            await UpdateDeckCard(deckCard);
+           
+            await UpdateDeckCard(deckCard.CardID, deckCard.DeckID, 1);
             Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == deckCard.CardID);
             return card;
         }
@@ -176,8 +183,7 @@ namespace SpeedWar.Models.Services
             foreach (DeckCard card in donor)
             {
                 temp.CardID = card.CardID;
-                temp.DeckID = recipient.ID;
-                await UpdateDeckCard(temp);
+                await UpdateDeckCard(card.CardID, card.DeckID, recipient.ID);
             }
         }
 
