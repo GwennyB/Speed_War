@@ -154,7 +154,7 @@ namespace SpeedWar.Models.Services
         public async Task ResetDecks(int ID)
         {
             List<DeckCard> collect = await GetDeck(ID, DeckType.Collect);
-            int playID = (await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID)).ID;
+            int playID = (await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play)).ID;
             DeckCard temp = new DeckCard();
             foreach (DeckCard card in collect)
             {

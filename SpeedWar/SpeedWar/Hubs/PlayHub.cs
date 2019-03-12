@@ -11,25 +11,20 @@ namespace SpeedWar.Hubs
     public class PlayHub : Hub
     {
         private IDeckCardManager _deckCardManager;
-        private IUserManager _userManager;
 
         public bool PlayerTurn { get; set; }
         public User CurrentUser { get; set; }
         public DeckCard FirstCard { get; set; }
         public DeckCard SecondCard { get; set; }
 
-        public PlayHub(IDeckCardManager deckCardManager, IUserManager userManager)
+        public PlayHub(IDeckCardManager deckCardManager, User player)
         {
             _deckCardManager = deckCardManager;
-            _userManager = userManager;
+            CurrentUser = player;
             PlayerTurn = true;
         }
 
-        public async Task<User> GetCurrentUser()
-        {
-            CurrentUser = await _userManager.GetUserAsync(_userManager.CurrentUserName);
-            return CurrentUser;
-        }
+
         //TO-DO: Scaffold PlayHub
         public async Task SendCard()
         {
@@ -57,8 +52,7 @@ namespace SpeedWar.Hubs
 
         public async Task PlayerFlip()
         {
-            User user = await GetCurrentUser();
-            await _deckCardManager.Flip(user.ID);
+            await _deckCardManager.Flip(CurrentUser.ID);
         }
     }
 }

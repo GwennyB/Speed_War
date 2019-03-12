@@ -231,7 +231,15 @@ namespace UnitTests
                 await svc.ResetDecks(3);
                 List<DeckCard> queryAfter = await svc.GetDeck(3, DeckType.Play);
 
-                Assert.Equal(queryBefore,queryAfter);
+                List<int> cardsBefore = new List<int>();
+                List<int> cardsAfter = new List<int>();
+                for(int i = 0; i < cardsBefore.Count; i++)
+                {
+                    cardsBefore.Add(queryBefore[i].CardID);
+                    cardsAfter.Add(queryAfter[i].CardID);
+                }
+
+                Assert.Equal(cardsBefore,cardsAfter);
             }
         }
     }
