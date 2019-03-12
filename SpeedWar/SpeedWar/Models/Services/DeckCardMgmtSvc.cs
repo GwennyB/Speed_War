@@ -146,22 +146,38 @@ namespace SpeedWar.Models.Services
         }
 
         /// <summary>
-        /// Moves all cards from specified player's 'Collect' deck to same player's 'Play' deck
-        /// (used to reset decks when 'Play' deck runs empty)
+        /// RESET: Moves all cards from specified player's 'Collect' deck to same player's 'Play' deck (used to reset decks when 'Play' deck runs empty)
+        /// SLAP:  Moves all cards from Discard deck to specified player's 'Collect' deck  (used when a match occurs and a user 'slaps')
         /// </summary>
-        /// <param name="ID"> User ID of player whose decks need reset </param>
+        /// <param name="ID"> ID of User who 'slapped' or needs reset </param>
+        /// <param name="slap"> indicates whether reset is of type 'slap' </param>
         /// <returns> completed task </returns>
-        public async Task ResetDecks(int ID)
+        public async Task ResetDecks(int ID, bool slap)
         {
-            List<DeckCard> collect = await GetDeck(ID, DeckType.Collect);
-            int playID = (await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play)).ID;
+            // set vars for specified use
+            List<DeckCard> donor;
+            Deck recipient;
+            // on 'slap'
+            if (slap == true)
+            {
+                donor = await GetDeck(1,DeckType.Discard);
+                recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Collect);
+            }
+            // on 'reset'
+            else
+            {
+                donor = await GetDeck(ID, DeckType.Collect);
+                recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
+            }
+            // move cards from 'donor' deck to 'recipient' deck
             DeckCard temp = new DeckCard();
-            foreach (DeckCard card in collect)
+            foreach (DeckCard card in donor)
             {
                 temp.CardID = card.CardID;
-                temp.DeckID = playID;
+                temp.DeckID = recipient.ID;
                 await UpdateDeckCard(temp);
             }
         }
+
     }
 }

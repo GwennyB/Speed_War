@@ -228,7 +228,7 @@ namespace UnitTests
                 await context.SaveChangesAsync();
 
                 List<DeckCard> queryBefore = await svc.GetDeck(3, DeckType.Collect);
-                await svc.ResetDecks(3);
+                await svc.ResetDecks(3, false);
                 List<DeckCard> queryAfter = await svc.GetDeck(3, DeckType.Play);
 
                 List<int> cardsBefore = new List<int>();
