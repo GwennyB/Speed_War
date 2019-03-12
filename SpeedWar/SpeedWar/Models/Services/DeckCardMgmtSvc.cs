@@ -53,11 +53,10 @@ namespace SpeedWar.Models.Services
         /// <returns> completed task </returns>
         public async Task UpdateDeckCard(DeckCard deckCard)
         {
-            DeckCard query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == deckCard.CardID);
+            DeckCard query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == deckCard.CardID && d.DeckID != deckCard.DeckID);
             if(query != null)
             {
                 _context.DeckCards.Remove(query);
-                await _context.SaveChangesAsync();
             }
             await _context.DeckCards.AddAsync(deckCard);
             await _context.SaveChangesAsync();
@@ -107,6 +106,22 @@ namespace SpeedWar.Models.Services
                 _context.DeckCards.Remove(card);
             }
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// compares ranks of top 2 cards in discard pile
+        /// returns 'true' if matching, returns 'false' if not matching
+        /// </summary>
+        /// <param name="last"> 2nd card in discard pile </param>
+        /// <param name="next"> top card in discard pile </param>
+        /// <returns> 'true' if last.Rank matches next.Rank, 'false' otherwise </returns>
+        public bool CompareCards(Card last, Card next)
+        {
+            if (last.Rank == next.Rank)
+            {
+                return true;
+            }
+            return false;
         }
 
     }
