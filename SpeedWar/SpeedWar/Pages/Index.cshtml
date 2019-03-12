@@ -13,18 +13,19 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="~/StyleSheet.css">
+    <link href="~/StyleSheet.css" rel="stylesheet" />
 
 </head>
 
 <body>
+    <div class="container">
         <form method="post">
-            <label asp-for="Username"></label>
-            <input asp-for="Username" />
+            <label class="three" asp-for="Username"></label>
+            <input id="username" asp-for="Username" />
             <button type="submit">Start game!</button>
 
         </form>
 
-
+    </div>
 </body>
 </html>
