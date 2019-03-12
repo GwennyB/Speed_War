@@ -2,6 +2,7 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 
+
 document.getElementById("sendButton").disabled = true;
 
 connection.on("RecieveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
@@ -23,6 +24,8 @@ connection.on("RecieveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
 
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
+    var player = document.getElementById("player").textContent;
+    connection.invoke("Intro", player);
 }).catch(function (err) {
     return console.error(err.toString());
 });

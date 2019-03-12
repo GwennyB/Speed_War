@@ -12,22 +12,23 @@ namespace SpeedWar.Pages.Play
     public class IndexModel : PageModel
     {
         private IDeckCardManager _deckCardContext;
+        private IUserManager _userContext;
 
-        [BindProperty]
         public User Player { get; set; }
         public bool GameStart { get; set; }
 
-        public IndexModel(IDeckCardManager deckCardManager)
+        public IndexModel(IDeckCardManager deckCardManager, IUserManager userManager)
         {
             _deckCardContext = deckCardManager;
+            _userContext = userManager;
             GameStart = true;
         }
 
-        
-        public async Task OnGet(User Player)
+        public async Task OnGet(User player )
         {
             if (GameStart == true)
             {
+                Player = player;
                 await _deckCardContext.DealGameAsync(Player.ID);
             }
         }
