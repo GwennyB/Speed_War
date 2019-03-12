@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\%40aspnet\" />
+    <Folder Include="wwwroot\Assets\" />
   </ItemGroup>
 
 </Project>

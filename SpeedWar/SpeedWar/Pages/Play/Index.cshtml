@@ -2,13 +2,22 @@
 @model SpeedWar.Pages.Play.IndexModel
 @{
 }
-Play Page
-<form method="post">
-    <button id="sendButton"> button </button>
 
-</form>
-<div id="first-card"></div>
-<div id="second-card"></div>
+<link rel="stylesheet" type="text/css" href="~/Play.css">
+<h1>Speed War</h1>
+<button id="sendButton"> button </button>
+
+@*DO NOT DELETE ME... I'M IMPORTANT!!!*@
+<p id="player" display="none">@Model.Player.Name</p>
+
+<ol id="first-card">
+    <li id="li1">*</li>
+    <li id="li2">*</li>
+</ol>
+<ol id="second-card">
+    <li id="li3">*</li>
+    <li id="li4">*</li>
+</ol>
 
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/play.js"></script>

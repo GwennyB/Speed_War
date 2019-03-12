@@ -10,7 +10,7 @@ namespace SpeedWar.Models.Services
 {
     public class DeckCardMgmtSvc : IDeckCardManager
     {
-        private CardDbContext _context { get; }
+        private CardDbContext _context;
 
         public DeckCardMgmtSvc(CardDbContext context)
         {
@@ -51,16 +51,19 @@ namespace SpeedWar.Models.Services
         /// </summary>
         /// <param name="deckCard"> new card-deck assignment </param>
         /// <returns> completed task </returns>
-        public async Task UpdateDeckCard(DeckCard deckCard)
+        public async Task UpdateDeckCard(int cardID, int oldDeckID, int newDeckID)
         {
-            DeckCard query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == deckCard.CardID);
-            if(query != null)
+            DeckCard deckCard = new DeckCard()
             {
-                _context.DeckCards.Remove(query);
-                await _context.SaveChangesAsync();
-            }
+                CardID = cardID,
+                DeckID = newDeckID
+            };
             await _context.DeckCards.AddAsync(deckCard);
             await _context.SaveChangesAsync();
+            DeckCard oldCard = await _context.DeckCards.FirstOrDefaultAsync(c => c.DeckID == oldDeckID && c.CardID == cardID);
+            _context.DeckCards.Remove(oldCard);
+            await _context.SaveChangesAsync();
+                    
         }
 
         /// <summary>
@@ -84,8 +87,11 @@ namespace SpeedWar.Models.Services
             int rnd;
             Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
             Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Play);
+            Deck discard = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 1 && d.DeckType == DeckType.Discard);
             await CleanDeck(player);
             await CleanDeck(computer);
+            await CleanDeck(discard);
+            
             Deck current = player;
             while (cards.Count > 0)
             {
@@ -98,7 +104,11 @@ namespace SpeedWar.Models.Services
             }
             await _context.SaveChangesAsync();
         }
-
+        /// <summary>
+        /// Takes in a deck, clears the cards out of the deck.
+        /// </summary>
+        /// <param name="deck">Any Deck</param>
+        /// <returns>No return, saves changes</returns>
         public async Task CleanDeck(Deck deck)
         {
             var cards = await GetDeck(deck.UserID, deck.DeckType);
@@ -108,6 +118,92 @@ namespace SpeedWar.Models.Services
             }
             await _context.SaveChangesAsync();
         }
+        /// <summary>
+        /// compares ranks of top 2 cards in discard pile
+        /// returns 'true' if matching, returns 'false' if not matching
+        /// </summary>
+        /// <param name="last"> 2nd card in discard pile </param>
+        /// <param name="next"> top card in discard pile </param>
+        /// <returns> 'true' if last.Rank matches next.Rank, 'false' otherwise </returns>
+        public bool CompareCards(Card last, Card next)
+        {
+            if (last.Rank == next.Rank)
+            {
+                return true;
+            }
+            return false;
+        }
 
+
+        public async Task<Card> Flip(int ID)
+        {
+            var check = await GetDeck(ID, DeckType.Play);
+            if (check.Count == 0)
+            {
+                EndGame(ID);
+            }
+            DeckCard deckCard = await GetCard(ID, DeckType.Play);
+           
+            await UpdateDeckCard(deckCard.CardID, deckCard.DeckID, 1);
+            Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == deckCard.CardID);
+            return card;
+        }
+
+        private void EndGame(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// RESET: Moves all cards from specified player's 'Collect' deck to same player's 'Play' deck (used to reset decks when 'Play' deck runs empty)
+        /// SLAP:  Moves all cards from Discard deck to specified player's 'Collect' deck  (used when a match occurs and a user 'slaps')
+        /// </summary>
+        /// <param name="ID"> ID of User who 'slapped' or needs reset </param>
+        /// <param name="slap"> indicates whether reset is of type 'slap' </param>
+        /// <returns> completed task </returns>
+        public async Task ResetDecks(int ID, bool slap)
+        {
+            // set vars for specified use
+            List<DeckCard> donor;
+            Deck recipient;
+            // on 'slap'
+            if (slap == true)
+            {
+                donor = await GetDeck(1,DeckType.Discard);
+                recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Collect);
+            }
+            // on 'reset'
+            else
+            {
+                donor = await GetDeck(ID, DeckType.Collect);
+                recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
+            }
+            // move cards from 'donor' deck to 'recipient' deck
+            DeckCard temp = new DeckCard();
+            foreach (DeckCard card in donor)
+            {
+                temp.CardID = card.CardID;
+                await UpdateDeckCard(card.CardID, card.DeckID, recipient.ID);
+            }
+        }
+
+        /// <summary>
+        /// checks to see whether either user has run out of cards and declares the other user as winner
+        /// </summary>
+        /// <param name="user"> client player </param>
+        /// <returns> user declared 'winner', or null if game continues </returns>
+        public async Task<User> CheckWinner(User user)
+        {
+            List<DeckCard> playUser = await GetDeck(user.ID, DeckType.Play);
+            List<DeckCard> collectUser = await GetDeck(user.ID, DeckType.Collect);
+            List<DeckCard> playComp = await GetDeck(2, DeckType.Play);
+            List<DeckCard> collectComp = await GetDeck(2, DeckType.Collect);
+            User comp = await _context.Users.FindAsync(2);
+            if ( playComp.Count == 0 && collectComp.Count == 0)
+            { return user; };
+            if (playUser.Count == 0 && collectUser.Count == 0)
+            { return comp; };
+            return null;
+        }
     }
 }

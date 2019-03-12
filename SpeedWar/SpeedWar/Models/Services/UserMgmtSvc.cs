@@ -35,6 +35,7 @@ namespace SpeedWar.Models.Services
             return user;
         }
 
+
         /// <summary>
         /// ***SUPPORTS GetUserAsync()***
         /// Creates new user and builds user's decks

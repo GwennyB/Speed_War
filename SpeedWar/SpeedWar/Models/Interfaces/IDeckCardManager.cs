@@ -9,9 +9,10 @@ namespace SpeedWar.Models.Interfaces
     {
         Task<List<DeckCard>> GetDeck(int userID, DeckType deckType);
         Task<DeckCard> GetCard(int userID, DeckType deckType);
-        Task UpdateDeckCard(DeckCard deckCard);
+        Task UpdateDeckCard(int cardID, int oldDeckID, int newDeckID);
         Task DealGameAsync(int ID);
         Task<List<Card>> GetAllCardsAsync();
+        Task<Card> Flip(int ID);
 
     }
 }
