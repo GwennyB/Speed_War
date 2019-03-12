@@ -12,7 +12,7 @@ namespace SpeedWar.Models.Interfaces
         Task UpdateDeckCard(DeckCard deckCard);
         Task DealGameAsync(int ID);
         Task<List<Card>> GetAllCardsAsync();
-        Task Flip(int ID);
+        Task<Card> Flip(int ID);
 
     }
 }

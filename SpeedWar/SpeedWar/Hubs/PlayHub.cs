@@ -14,8 +14,8 @@ namespace SpeedWar.Hubs
 
         public bool PlayerTurn { get; set; }
         public User CurrentUser { get; set; }
-        public DeckCard FirstCard { get; set; }
-        public DeckCard SecondCard { get; set; }
+        public Card FirstCard { get; set; }
+        public Card SecondCard { get; set; }
 
         public PlayHub(IDeckCardManager deckCardManager, User player)
         {
@@ -43,7 +43,7 @@ namespace SpeedWar.Hubs
 
         public async Task PlayerFlip()
         {
-
+            
             SecondCard = FirstCard;
             FirstCard = await _deckCardManager.Flip(3);
 
@@ -54,14 +54,14 @@ namespace SpeedWar.Hubs
                 card1Rank = FirstCard.Rank.ToString();
                 card1Suit = FirstCard.Suit.ToString();
             }
-
+            
             string card2Rank = "";
-            string card2Suit = "";
+            string card2Suit = "";            
             if (SecondCard != null)
             {
                 card2Rank = SecondCard.Rank.ToString();
                 card2Suit = SecondCard.Suit.ToString();
-            }
+            } 
             await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
         }
     }
