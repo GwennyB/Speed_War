@@ -1,0 +1,51 @@
+﻿body {
+    background-color:papayawhip;
+}
+label {
+    font-size: 10px;
+    margin: 10px 20px 0px;
+    font-weight: 700px
+}
+
+.container {
+    width: 700px;
+    height: 810px;
+    box-shadow: 0 0 15px rgba(14,41,57,0.12),0 2px 5px rgba(14,41,57,0.44),inset 0 -1px 2px rgba(14,41,57,0.15);
+    float: left;
+    padding: 10px 50px 10;
+    background-image: url(https://www.hominter.com/image/cache/catalog/mosaic-tiles/B963-3-800x800.jpg);
+    margin: 2% 30%;
+    border-radius: 5px
+}
+
+form {
+    display: block;
+    padding: 1em 1em 1em 1em;
+}
+
+#username {
+    font-size: 30px;
+    font-height: 40px display: inline-block
+}
+
+button {
+    background-color: brown;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-block;
+    font-size: 26px;
+    margin: 2em
+}
+
+.three {
+    display: block;
+    margin-left: 3px;
+    margin-top: 200px;
+    font-size: 26px;
+    height: 10px;
+    margin: 8em
+}
