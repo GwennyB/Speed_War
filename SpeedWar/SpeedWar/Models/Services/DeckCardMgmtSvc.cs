@@ -128,7 +128,7 @@ namespace SpeedWar.Models.Services
         }
 
 
-        public async Task Flip(int ID)
+        public async Task<Card> Flip(int ID)
         {
             var check = await GetDeck(ID, DeckType.Play);
             if (check.Count == 0)
@@ -138,6 +138,8 @@ namespace SpeedWar.Models.Services
             DeckCard deckCard = await GetCard(ID, DeckType.Play);
             deckCard.DeckID = 1;
             await UpdateDeckCard(deckCard);
+            Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == deckCard.CardID);
+            return card;
         }
 
         private void EndGame(int ID)
