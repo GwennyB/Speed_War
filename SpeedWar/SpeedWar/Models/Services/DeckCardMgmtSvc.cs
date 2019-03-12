@@ -98,7 +98,11 @@ namespace SpeedWar.Models.Services
             }
             await _context.SaveChangesAsync();
         }
-
+        /// <summary>
+        /// Takes in a deck, clears the cards out of the deck.
+        /// </summary>
+        /// <param name="deck">Any Deck</param>
+        /// <returns>No return, saves changes</returns>
         public async Task CleanDeck(Deck deck)
         {
             var cards = await GetDeck(deck.UserID, deck.DeckType);
@@ -107,6 +111,23 @@ namespace SpeedWar.Models.Services
                 _context.DeckCards.Remove(card);
             }
             await _context.SaveChangesAsync();
+        }
+
+        public async Task Flip(int ID)
+        {
+            var check = await GetDeck(ID, DeckType.Play);
+            if (check.Count == 0)
+            {
+                EndGame(ID);
+            }
+            DeckCard deckCard = await GetCard(ID, DeckType.Play);
+            deckCard.DeckID = 1;
+            await UpdateDeckCard(deckCard);
+        }
+
+        private void EndGame(int ID)
+        {
+            throw new NotImplementedException();
         }
 
     }
