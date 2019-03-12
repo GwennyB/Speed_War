@@ -17,7 +17,6 @@ namespace SpeedWar.Pages.Play
         public User Player { get; set; }
         public bool GameStart { get; set; }
 
-
         public IndexModel(IDeckCardManager deckCardManager)
         {
             _deckCardContext = deckCardManager;

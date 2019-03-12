@@ -145,5 +145,23 @@ namespace SpeedWar.Models.Services
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Moves all cards from specified player's 'Collect' deck to same player's 'Play' deck
+        /// (used to reset decks when 'Play' deck runs empty)
+        /// </summary>
+        /// <param name="ID"> User ID of player whose decks need reset </param>
+        /// <returns> completed task </returns>
+        public async Task ResetDecks(int ID)
+        {
+            List<DeckCard> collect = await GetDeck(ID, DeckType.Collect);
+            int playID = (await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play)).ID;
+            DeckCard temp = new DeckCard();
+            foreach (DeckCard card in collect)
+            {
+                temp.CardID = card.CardID;
+                temp.DeckID = playID;
+                await UpdateDeckCard(temp);
+            }
+        }
     }
 }
