@@ -1,0 +1,113 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SpeedWar.Data;
+using SpeedWar.Models.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace SpeedWar.Models.Services
+{
+    public class DeckCardMgmtSvc : IDeckCardManager
+    {
+        private CardDbContext _context { get; }
+
+        public DeckCardMgmtSvc(CardDbContext context)
+        {
+            _context = context;
+        }
+
+        /// <summary>
+        /// collects and returns a specified deck as a list
+        /// </summary>
+        /// <param name="userID"> deck owner's ID </param>
+        /// <param name="deckType"> deck type (ie - 'play', 'collect', 'discard' </param>
+        /// <returns> card deck, formatted as list </returns>
+        public async Task<List<DeckCard>> GetDeck(int userID, DeckType deckType)
+        {
+            Deck deck = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == userID && d.DeckType == deckType);
+            List<DeckCard> cardDeck = await _context.DeckCards.Where(d => d.DeckID == deck.ID).ToListAsync();
+            return cardDeck;
+        }
+
+        /// <summary>
+        /// returns a random card from specified deck
+        /// simulates returning top card from a shuffled deck
+        /// </summary>
+        /// <param name="userID"> deck owner's ID </param>
+        /// <param name="deckType"> deck type (ie - 'play', 'collect', 'discard' </param>
+        /// <returns> randomly selected card from specified deck </returns>
+        public async Task<DeckCard> GetCard(int userID, DeckType deckType)
+        {
+            List<DeckCard> cardDeck = await GetDeck(userID, deckType);
+            Random random = new Random();
+            int rnd = random.Next(0, cardDeck.Count - 1);
+            DeckCard deckCard = cardDeck[rnd];
+            return deckCard;
+        }
+
+        /// <summary>
+        /// updates the deck-location of a card
+        /// </summary>
+        /// <param name="deckCard"> new card-deck assignment </param>
+        /// <returns> completed task </returns>
+        public async Task UpdateDeckCard(DeckCard deckCard)
+        {
+            DeckCard query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == deckCard.CardID);
+            if(query != null)
+            {
+                _context.DeckCards.Remove(query);
+                await _context.SaveChangesAsync();
+            }
+            await _context.DeckCards.AddAsync(deckCard);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// gets all cards and returns as a list
+        /// </summary>
+        /// <returns> list of all cards </returns>
+        public async Task<List<Card>> GetAllCardsAsync()
+        {
+            return await _context.Cards.ToListAsync();
+        }
+
+        /// <summary>
+        /// 'deals' a new game by splitting all cards randomly between player and computer
+        /// </summary>
+        /// <param name="ID"> player's UserID </param>
+        /// <returns> task completed </returns>
+        public async Task DealGameAsync(int ID /*, int ID2 */) // de-comment to add 2nd player
+        {
+            List<Card> cards = await GetAllCardsAsync();
+            Random random = new Random();
+            int rnd;
+            Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
+            Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Play);
+            await CleanDeck(player);
+            await CleanDeck(computer);
+            Deck current = player;
+            while (cards.Count > 0)
+            {
+                rnd = random.Next(0, cards.Count - 1);
+                await _context.DeckCards.AddAsync(new DeckCard() { CardID = cards[rnd].ID, DeckID = current.ID });
+                await _context.SaveChangesAsync();
+                DeckCard test = await _context.DeckCards.FirstOrDefaultAsync(c => c.CardID == cards[rnd].ID && c.DeckID == current.ID);
+                cards.Remove(cards[rnd]);
+                current = (current == player) ? computer : player;
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CleanDeck(Deck deck)
+        {
+            var cards = await GetDeck(deck.UserID, deck.DeckType);
+            foreach (var card in cards)
+            {
+                _context.DeckCards.Remove(card);
+            }
+            await _context.SaveChangesAsync();
+        }
+
+    }
+}

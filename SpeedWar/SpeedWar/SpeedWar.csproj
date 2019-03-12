@@ -3,17 +3,18 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <UserSecretsId>2e08d634-2c36-49d7-ab8b-58b391af2fc8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.0" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Models\Services\" />
-    <Folder Include="Models\Interfaces\" />
+    <Folder Include="wwwroot\lib\%40aspnet\" />
   </ItemGroup>
 
 </Project>
