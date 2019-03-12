@@ -1,0 +1,20 @@
+﻿body {
+    background-image:url(Assets/deck.png);
+}
+
+h1{
+    text-align:center;
+}
+#first-card {
+    display: inline-block;
+    height: 350px;
+    width: 200px;
+    border: 3px solid grey;
+}
+
+#second-card {
+    display: inline-block;
+    height: 350px;
+    width: 200px;
+    border: 3px solid grey;
+}
