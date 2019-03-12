@@ -84,6 +84,8 @@ namespace SpeedWar.Models.Services
             int rnd;
             Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
             Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Play);
+            await CleanDeck(player);
+            await CleanDeck(computer);
             Deck current = player;
             while (cards.Count > 0)
             {
@@ -93,6 +95,16 @@ namespace SpeedWar.Models.Services
                 DeckCard test = await _context.DeckCards.FirstOrDefaultAsync(c => c.CardID == cards[rnd].ID && c.DeckID == current.ID);
                 cards.Remove(cards[rnd]);
                 current = (current == player) ? computer : player;
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CleanDeck(Deck deck)
+        {
+            var cards = await GetDeck(deck.UserID, deck.DeckType);
+            foreach (var card in cards)
+            {
+                _context.DeckCards.Remove(card);
             }
             await _context.SaveChangesAsync();
         }
