@@ -246,7 +246,7 @@ namespace UnitTests
         [Fact]
         public async Task CanDeclareCompWinner()
         {
-            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("ResetDecks").Options;
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("CompWinner").Options;
 
             using (CardDbContext context = new CardDbContext(options))
             {
@@ -282,6 +282,90 @@ namespace UnitTests
                 await context.SaveChangesAsync();
 
                 Assert.Equal(comp, await svc.CheckWinner(player));
+            }
+        }
+
+        [Fact]
+        public async Task CanDeclarePlayerWinner()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("PlayerWinner").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                User comp = new User() { ID = 2, Name = "Computer" };
+                User player = new User() { ID = 3, Name = "Player" };
+                await context.Users.AddAsync(comp);
+                await context.Users.AddAsync(player);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.Ace, Suit = Suit.spades };
+                Card card3 = new Card() { ID = 3, Rank = Rank.Ace, Suit = Suit.clubs };
+                Card card4 = new Card() { ID = 4, Rank = Rank.Ace, Suit = Suit.diamonds };
+                await context.Cards.AddAsync(card1);
+                await context.Cards.AddAsync(card2);
+                await context.Cards.AddAsync(card3);
+                await context.Cards.AddAsync(card4);
+                Deck deck1 = new Deck() { ID = 1, UserID = 2, DeckType = DeckType.Collect };
+                Deck deck2 = new Deck() { ID = 2, UserID = 2, DeckType = DeckType.Play };
+                Deck deck3 = new Deck() { ID = 3, UserID = 3, DeckType = DeckType.Collect };
+                Deck deck4 = new Deck() { ID = 4, UserID = 3, DeckType = DeckType.Play };
+                await context.Decks.AddAsync(deck1);
+                await context.Decks.AddAsync(deck2);
+                await context.Decks.AddAsync(deck3);
+                await context.Decks.AddAsync(deck4);
+                DeckCard dc1 = new DeckCard() { CardID = 1, DeckID = 3 };
+                DeckCard dc2 = new DeckCard() { CardID = 2, DeckID = 3 };
+                DeckCard dc3 = new DeckCard() { CardID = 3, DeckID = 4 };
+                DeckCard dc4 = new DeckCard() { CardID = 4, DeckID = 4 };
+                await context.DeckCards.AddAsync(dc1);
+                await context.DeckCards.AddAsync(dc2);
+                await context.DeckCards.AddAsync(dc3);
+                await context.DeckCards.AddAsync(dc4);
+                await context.SaveChangesAsync();
+
+                Assert.Equal(player, await svc.CheckWinner(player));
+            }
+        }
+
+        [Fact]
+        public async Task CanDeclareNullWinner()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("NullWinner").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                User comp = new User() { ID = 2, Name = "Computer" };
+                User player = new User() { ID = 3, Name = "Player" };
+                await context.Users.AddAsync(comp);
+                await context.Users.AddAsync(player);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.Ace, Suit = Suit.spades };
+                Card card3 = new Card() { ID = 3, Rank = Rank.Ace, Suit = Suit.clubs };
+                Card card4 = new Card() { ID = 4, Rank = Rank.Ace, Suit = Suit.diamonds };
+                await context.Cards.AddAsync(card1);
+                await context.Cards.AddAsync(card2);
+                await context.Cards.AddAsync(card3);
+                await context.Cards.AddAsync(card4);
+                Deck deck1 = new Deck() { ID = 1, UserID = 2, DeckType = DeckType.Collect };
+                Deck deck2 = new Deck() { ID = 2, UserID = 2, DeckType = DeckType.Play };
+                Deck deck3 = new Deck() { ID = 3, UserID = 3, DeckType = DeckType.Collect };
+                Deck deck4 = new Deck() { ID = 4, UserID = 3, DeckType = DeckType.Play };
+                await context.Decks.AddAsync(deck1);
+                await context.Decks.AddAsync(deck2);
+                await context.Decks.AddAsync(deck3);
+                await context.Decks.AddAsync(deck4);
+                DeckCard dc1 = new DeckCard() { CardID = 1, DeckID = 1 };
+                DeckCard dc2 = new DeckCard() { CardID = 2, DeckID = 1 };
+                DeckCard dc3 = new DeckCard() { CardID = 3, DeckID = 4 };
+                DeckCard dc4 = new DeckCard() { CardID = 4, DeckID = 4 };
+                await context.DeckCards.AddAsync(dc1);
+                await context.DeckCards.AddAsync(dc2);
+                await context.DeckCards.AddAsync(dc3);
+                await context.DeckCards.AddAsync(dc4);
+                await context.SaveChangesAsync();
+
+                Assert.Null(await svc.CheckWinner(player));
             }
         }
     }
