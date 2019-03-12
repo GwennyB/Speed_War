@@ -24,7 +24,7 @@ namespace SpeedWar.Pages.Play
             GameStart = true;
         }
 
-        
+
         public async Task OnGet(User Player)
         {
             if (GameStart == true)
