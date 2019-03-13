@@ -154,19 +154,17 @@ namespace SpeedWar.Models.Services
         /// <returns> card in play </returns>
         public async Task<Card> Flip(int ID)
         {
-            // TODO: move 'end game' call to 'Slap' feature
-            //var check = await GetDeck(ID, DeckType.Play);
-            //if (check.Count == 0)
-            //{
-            //    EndGame(ID);
-            //}
-            if(CheckWinner(ID) == null)
+            var check = await GetDeck(ID, DeckType.Play);
+
+            // if 'Play' deck isn't empty, then play a random card
+            if(check.Count > 0)
             {
                 DeckCard deckCard = await GetCard(ID, DeckType.Play);
                 await UpdateDeckCard(deckCard.CardID, deckCard.DeckID, 1);
                 Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == deckCard.CardID);
                 return card;
             }
+            // if 'Play' deck is empty, then can't play unless/until successful 'Slap'
             return null;
         }
 
