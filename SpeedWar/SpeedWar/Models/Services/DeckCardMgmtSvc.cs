@@ -53,6 +53,10 @@ namespace SpeedWar.Models.Services
         /// <returns> completed task </returns>
         public async Task UpdateDeckCard(int cardID, int oldDeckID, int newDeckID)
         {
+
+            var query = await _context.DeckCards.FirstOrDefaultAsync(d => d.CardID == cardID && d.DeckID == oldDeckID);
+            await Task.Run(() => _context.DeckCards.Remove(query));
+
             DeckCard deckCard = new DeckCard()
             {
                 CardID = cardID,
@@ -60,10 +64,7 @@ namespace SpeedWar.Models.Services
             };
             await _context.DeckCards.AddAsync(deckCard);
             await _context.SaveChangesAsync();
-            DeckCard oldCard = await _context.DeckCards.FirstOrDefaultAsync(c => c.DeckID == oldDeckID && c.CardID == cardID);
-            _context.DeckCards.Remove(oldCard);
-            await _context.SaveChangesAsync();
-                    
+        
         }
 
         /// <summary>
@@ -159,9 +160,10 @@ namespace SpeedWar.Models.Services
             // if 'Play' deck isn't empty, then play a random card
             if(check.Count > 0)
             {
-                DeckCard deckCard = await GetCard(ID, DeckType.Play);
-                await UpdateDeckCard(deckCard.CardID, deckCard.DeckID, 1);
-                Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == deckCard.CardID);
+                int DeckID = (await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play)).ID;
+                int CardID = (await GetCard(ID, DeckType.Play)).CardID;
+                await UpdateDeckCard(CardID, DeckID, 1);
+                Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == CardID);
                 return card;
             }
             // if 'Play' deck is empty, then can't play unless/until successful 'Slap'
