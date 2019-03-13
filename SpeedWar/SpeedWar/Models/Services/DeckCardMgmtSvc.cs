@@ -80,18 +80,29 @@ namespace SpeedWar.Models.Services
         /// </summary>
         /// <param name="ID"> player's UserID </param>
         /// <returns> task completed </returns>
-        public async Task DealGameAsync(int ID /*, int ID2 */) // de-comment to add 2nd player
+        public async Task DealGameAsync(int ID)
         {
-            List<Card> cards = await GetAllCardsAsync();
-            Random random = new Random();
-            int rnd;
             Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
             Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Play);
             Deck discard = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 1 && d.DeckType == DeckType.Discard);
             await CleanDeck(player);
             await CleanDeck(computer);
             await CleanDeck(discard);
-            
+            await DealGameAsync(player, computer);
+        }
+
+        /// <summary>
+        /// (HELPER / overload)
+        /// Deals cards to Player and Computer 'Play' decks
+        /// </summary>
+        /// <param name="player"> client player's 'Play' deck </param>
+        /// <param name="computer"> computer player's 'Play' deck </param>
+        /// <returns> completed task </returns>
+        private async Task DealGameAsync(Deck player, Deck computer)
+        {
+            List<Card> cards = await GetAllCardsAsync();
+            Random random = new Random();
+            int rnd;
             Deck current = player;
             while (cards.Count > 0)
             {
@@ -104,6 +115,7 @@ namespace SpeedWar.Models.Services
             }
             await _context.SaveChangesAsync();
         }
+
         /// <summary>
         /// Takes in a deck, clears the cards out of the deck.
         /// </summary>
@@ -118,6 +130,7 @@ namespace SpeedWar.Models.Services
             }
             await _context.SaveChangesAsync();
         }
+
         /// <summary>
         /// compares ranks of top 2 cards in discard pile
         /// returns 'true' if matching, returns 'false' if not matching
@@ -134,20 +147,29 @@ namespace SpeedWar.Models.Services
             return false;
         }
 
-
+        /// <summary>
+        /// plays a random card from selected player's 'Play' deck onto 'Discard' pile
+        /// </summary>
+        /// <param name="ID"> UserID of player who's playing </param>
+        /// <returns> card in play </returns>
         public async Task<Card> Flip(int ID)
         {
-            var check = await GetDeck(ID, DeckType.Play);
-            if (check.Count == 0)
+            // TODO: move 'end game' call to 'Slap' feature
+            //var check = await GetDeck(ID, DeckType.Play);
+            //if (check.Count == 0)
+            //{
+            //    EndGame(ID);
+            //}
+            if(CheckWinner(ID) == null)
             {
-                EndGame(ID);
+                DeckCard deckCard = await GetCard(ID, DeckType.Play);
+                await UpdateDeckCard(deckCard.CardID, deckCard.DeckID, 1);
+                Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == deckCard.CardID);
+                return card;
             }
-            DeckCard deckCard = await GetCard(ID, DeckType.Play);
-           
-            await UpdateDeckCard(deckCard.CardID, deckCard.DeckID, 1);
-            Card card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == deckCard.CardID);
-            return card;
+            return null;
         }
+
 
         private void EndGame(int ID)
         {
@@ -187,20 +209,23 @@ namespace SpeedWar.Models.Services
             }
         }
 
+
+
         /// <summary>
         /// checks to see whether either user has run out of cards and declares the other user as winner
         /// </summary>
         /// <param name="user"> client player </param>
         /// <returns> user declared 'winner', or null if game continues </returns>
-        public async Task<User> CheckWinner(User user)
+        public async Task<User> CheckWinner(int ID)
         {
-            List<DeckCard> playUser = await GetDeck(user.ID, DeckType.Play);
-            List<DeckCard> collectUser = await GetDeck(user.ID, DeckType.Collect);
+            User player = await _context.Users.FindAsync(ID);
+            User comp = await _context.Users.FindAsync(2);
+            List<DeckCard> playUser = await GetDeck(player.ID, DeckType.Play);
+            List<DeckCard> collectUser = await GetDeck(player.ID, DeckType.Collect);
             List<DeckCard> playComp = await GetDeck(2, DeckType.Play);
             List<DeckCard> collectComp = await GetDeck(2, DeckType.Collect);
-            User comp = await _context.Users.FindAsync(2);
             if ( playComp.Count == 0 && collectComp.Count == 0)
-            { return user; };
+            { return player; };
             if (playUser.Count == 0 && collectUser.Count == 0)
             { return comp; };
             return null;
