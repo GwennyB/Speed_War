@@ -24,7 +24,7 @@ namespace SpeedWar.Hubs
         {
             _deck = deckCardManager;
             _userManager = userManager;
-            PlayerTurn = true;
+            //PlayerTurn = true;
         }
 
         public async Task Intro(string username)
@@ -33,9 +33,6 @@ namespace SpeedWar.Hubs
         }
 
 
-
-
-        //TO-DO: Scaffold PlayHub
         public async Task SendCard(Card temp)
         {
             SecondCard = FirstCard;
@@ -92,7 +89,7 @@ namespace SpeedWar.Hubs
         public async Task PlayerFlip()
         {
 
-            if (FirstCard.Rank != SecondCard.Rank)
+            if ((FirstCard != null && SecondCard != null && FirstCard.Rank != SecondCard.Rank) || (FirstCard == null || SecondCard == null))
             {
                 Card temp = await _deck.Flip(CurrentUser.ID);
                 if (temp == null)
@@ -117,6 +114,7 @@ namespace SpeedWar.Hubs
 
         public async Task Slap (int ID)
         {
+            PlayerTurn = true;
             if (FirstCard == SecondCard)
             {
                 await _deck.Slap(ID);

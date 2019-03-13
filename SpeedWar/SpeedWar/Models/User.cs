@@ -9,5 +9,9 @@ namespace SpeedWar.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public bool PlayerTurn { get; set; }
+        public int FirstCard { get; set; }
+        public int SecondCard { get; set; }
+        public bool EmptyDecks { get; set; }
     }
 }

@@ -15,10 +15,9 @@ namespace SpeedWar.Models.Interfaces
         Task CleanDeck(Deck deck);
         bool CompareCards(Card last, Card next);
         Task<Card> Flip(int ID);
-        void EndGame(int ID);
+        //void EndGame(int ID);
         Task ResetDecks(int ID);
         Task Slap(int ID);
-        Task ResetDecks(List<DeckCard> donor, Deck recipient);
         Task<User> CheckWinner(int ID);
     }
 }
