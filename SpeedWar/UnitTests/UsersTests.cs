@@ -29,6 +29,38 @@ namespace UnitTests
         }
 
         [Fact]
+        public void PlayerTurnGetSet()
+        {
+            User user = new User();
+            user.PlayerTurn = true;
+            Assert.True(user.PlayerTurn);
+        }
+
+        [Fact]
+        public void FirstCardGetSet()
+        {
+            User user = new User();
+            user.FirstCard = 99;
+            Assert.Equal(99, user.FirstCard);
+        }
+
+        [Fact]
+        public void SecondCardGetSet()
+        {
+            User user = new User();
+            user.SecondCard = 99;
+            Assert.Equal(99, user.SecondCard);
+        }
+
+        [Fact]
+        public void EmptyDeckGetSet()
+        {
+            User user = new User();
+            user.EmptyDecks = true;
+            Assert.True(user.EmptyDecks);
+        }
+
+        [Fact]
         public async Task CanGetExistingUser()
         {
             DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("GetExistingUser").Options;
