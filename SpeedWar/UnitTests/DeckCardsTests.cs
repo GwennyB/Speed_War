@@ -199,6 +199,58 @@ namespace UnitTests
         }
 
         [Fact]
+        public async Task CanCleanDeck()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("ResetDecks").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.Ace, Suit = Suit.spades };
+                Card card3 = new Card() { ID = 3, Rank = Rank.Ace, Suit = Suit.clubs };
+                Card card4 = new Card() { ID = 4, Rank = Rank.Ace, Suit = Suit.diamonds };
+                await context.Cards.AddAsync(card1);
+                await context.Cards.AddAsync(card2);
+                await context.Cards.AddAsync(card3);
+                await context.Cards.AddAsync(card4);
+                Deck deck = new Deck() { ID = 1, UserID = 3, DeckType = DeckType.Collect };
+                await context.Decks.AddAsync(deck);
+                DeckCard dc1 = new DeckCard() { CardID = 1, DeckID = 1 };
+                DeckCard dc2 = new DeckCard() { CardID = 2, DeckID = 1 };
+                DeckCard dc3 = new DeckCard() { CardID = 3, DeckID = 1 };
+                DeckCard dc4 = new DeckCard() { CardID = 4, DeckID = 1 };
+                await context.DeckCards.AddAsync(dc1);
+                await context.DeckCards.AddAsync(dc2);
+                await context.DeckCards.AddAsync(dc3);
+                await context.DeckCards.AddAsync(dc4);
+                await context.SaveChangesAsync();
+
+                await svc.CleanDeck(deck);
+
+                Assert.Empty(await svc.GetDeck(deck.UserID, deck.DeckType));
+            }
+        }
+
+        [Fact]
+        public async Task CanCompareCards()
+        {
+            // TODO: add this test
+        }
+
+        [Fact]
+        public async Task CanFlipComp()
+        {
+            // TODO: add this test
+        }
+
+        [Fact]
+        public async Task CanFlipClient()
+        {
+            // TODO: add this test
+        }
+
+        [Fact]
         public async Task CanResetDecks()
         {
             DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("ResetDecks").Options;
