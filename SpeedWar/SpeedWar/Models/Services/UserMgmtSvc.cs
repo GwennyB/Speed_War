@@ -57,8 +57,10 @@ namespace SpeedWar.Models.Services
 
         public async Task<Card> GetFirstCard(string username)
         {
-            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
-            var card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == query.FirstCard);
+
+            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name == username);
+            int cardID = query.FirstCard;
+            var card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == cardID);
             return card;
         }
 

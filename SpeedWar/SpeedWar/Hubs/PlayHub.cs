@@ -18,34 +18,27 @@ namespace SpeedWar.Hubs
         {
             _deck = deckCardManager;
             _user = userManager;
-            //PlayerTurn = true;
         }
-
-        //public async Task Intro(string username)
-        //{
-        //    CurrentUser = await _userManager.GetUserAsync(username);
-        //}
-
 
         public async Task SendCard(Card temp, string username)
         {
             Card FirstCard = await _user.GetFirstCard(username);
             Card SecondCard = await _user.GetSecondCard(username);
-            await _user.UpdateSecondCard(username, FirstCard.ID);
-            await _user.UpdateFirstCard(username, temp.ID);
             SecondCard = FirstCard;
             FirstCard = temp;
+            await _user.UpdateSecondCard(username, SecondCard.ID);
+            await _user.UpdateFirstCard(username, FirstCard.ID);
 
             string card1Rank = "null";
             string card1Suit = "null";
             string card2Rank = "null";
             string card2Suit = "null";
-            if (FirstCard != null)
+            if (FirstCard.ID != 53)
             {
                 card1Rank = FirstCard.Rank.ToString();
                 card1Suit = FirstCard.Suit.ToString();
             }
-            if (SecondCard != null)
+            if (SecondCard.ID != 54)
             {
                 card2Rank = SecondCard.Rank.ToString();
                 card2Suit = SecondCard.Suit.ToString();
@@ -97,7 +90,13 @@ namespace SpeedWar.Hubs
             Card SecondCard = await _user.GetSecondCard(username);
             bool EmptyDecks = await _deck.EmptyDecks(CurrentUser.ID);
 
-            if ((FirstCard != null && SecondCard != null && FirstCard.Rank != SecondCard.Rank) || (FirstCard == null || SecondCard == null))
+            
+            if ((FirstCard.ID != 53 && SecondCard.ID != 54 && FirstCard.Rank == SecondCard.Rank))
+            {
+                await Task.Delay(1000);
+            }
+
+            else
             {
                 Card temp = await _deck.Flip(CurrentUser.ID);
                 if (temp == null)
@@ -107,13 +106,15 @@ namespace SpeedWar.Hubs
                 }
                 else
                 {
-                    SendCard(temp, username);
+                    //await _user.UpdateSecondCard(username, FirstCard.ID);
+                    //await _user.UpdateFirstCard(username, temp.ID);
+                    await SendCard(temp, username);
                 }
             }
 
             if (PlayerTurn == true)
             {
-                PlayerTurn = false;
+                await _user.UpdatePlayerTurn(username, false);
                 ComputerFlip(username);
             }
 

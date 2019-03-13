@@ -80,7 +80,9 @@ namespace SpeedWar.Data
                 new Card { ID = 49, Rank = Rank.Ten, Suit = Suit.diamonds },
                 new Card { ID = 50, Rank = Rank.Jack, Suit = Suit.diamonds },
                 new Card { ID = 51, Rank = Rank.Queen, Suit = Suit.diamonds },
-                new Card { ID = 52, Rank = Rank.King, Suit = Suit.diamonds }
+                new Card { ID = 52, Rank = Rank.King, Suit = Suit.diamonds },
+                new Card { ID = 53, Rank = Rank.King, Suit = Suit.clubs },
+                new Card { ID = 54, Rank = Rank.King, Suit = Suit.clubs }
                 );
 
             modelBuilder.Entity<User>().HasData(
