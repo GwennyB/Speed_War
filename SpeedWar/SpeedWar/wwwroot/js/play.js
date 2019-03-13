@@ -3,7 +3,7 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 var player = document.getElementById("player").textContent;
 connection.invoke("Intro", player);
-
+var playerTurn = true;
 document.getElementById("sendButton").disabled = true;
 
 
@@ -19,9 +19,6 @@ connection.on("RecieveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
     li2.textContent = card1Suit
     li3.textContent = card2Suit
     li4.textContent = card2Rank
-
-
-
 })
 
 connection.start().then(function () {
@@ -33,6 +30,7 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
+    playerTurn = true;
     var userName = document.getElementById("player").textContent;
     var secondRank = document.getElementById("li1").textContent;
     var secondSuit = document.getElementById("li2").textContent;
@@ -40,7 +38,7 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     connection.invoke("PlayerFlip", secondRank, secondSuit, userName).catch(function (err) {
         return console.error(err.toString());
     });
-    event.preventDefault();
-
-
+    event.preventDefault(); 
 });
+
+

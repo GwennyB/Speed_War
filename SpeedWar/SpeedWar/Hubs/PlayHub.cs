@@ -42,18 +42,32 @@ namespace SpeedWar.Hubs
             await Clients.All.SendAsync("RecieveCard", card1Rank, card1Suit, card2Rank, card2Suit);
         }
 
-        public async Task ComputerFlip()
+        public async Task ComputerFlip(string secondRank, string secondSuit)
         {
-            while (PlayerTurn == false)
-            {
-                SecondCard = FirstCard;
+            //while (PlayerTurn == false)
+            //{
                 FirstCard = await _deckCardManager.Flip(2);
-                await SendCard(FirstCard.Rank.ToString(), FirstCard.Suit.ToString(), SecondCard.Rank.ToString(), SecondCard.Suit.ToString());
-            }
+
+                string card1Rank = "null";
+                string card1Suit = "null";
+                if (FirstCard != null)
+                {
+                    card1Rank = FirstCard.Rank.ToString();
+                    card1Suit = FirstCard.Suit.ToString();
+                }
+
+                string card2Rank = secondRank;
+                string card2Suit = secondSuit;
+                await Task.Delay(1000);
+                await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
+                secondRank = card1Rank;
+                secondSuit = card1Suit;    
+            //}
         }
 
         public async Task PlayerFlip(string secondRank, string secondSuit, string userName)
         {
+            PlayerTurn = true;
             User user = await _userManager.GetUserAsync(userName);
             FirstCard = await _deckCardManager.Flip(user.ID);
 
@@ -68,6 +82,8 @@ namespace SpeedWar.Hubs
             string card2Rank = secondRank;
             string card2Suit = secondSuit;
             await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
+            PlayerTurn = false;
+            await ComputerFlip(card1Rank, card1Suit);
         }
     }
 }
