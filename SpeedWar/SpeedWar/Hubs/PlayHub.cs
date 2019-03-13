@@ -66,7 +66,7 @@ namespace SpeedWar.Hubs
                     await Task.Delay(1000);
                     if (PlayerTurn == false)
                     {
-                        await _deck.Slap(2);
+                        await Slap(2);
                     }
                 }
 
@@ -97,8 +97,8 @@ namespace SpeedWar.Hubs
                 Card temp = await _deck.Flip(CurrentUser.ID);
                 if (temp == null)
                 {
-                    // reset decks
-                    // try again
+                    await _deck.ResetDecks(2);
+                    temp = await _deck.Flip(CurrentUser.ID);
                 }
                 else
                 {
@@ -114,6 +114,14 @@ namespace SpeedWar.Hubs
 
         }
 
+
+        public async Task Slap (int ID)
+        {
+            if (FirstCard == SecondCard)
+            {
+                await _deck.Slap(ID);
+            }
+        }
 
 
     }
