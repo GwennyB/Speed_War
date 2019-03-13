@@ -181,24 +181,34 @@ namespace SpeedWar.Models.Services
         /// <param name="ID"> ID of User who 'slapped' or needs reset </param>
         /// <param name="slap"> indicates whether reset is of type 'slap' </param>
         /// <returns> completed task </returns>
-        public async Task ResetDecks(int ID, bool slap)
+        public async Task ResetDecks(int ID)
         {
-            // set vars for specified use
-            List<DeckCard> donor;
-            Deck recipient;
-            // on 'slap'
-            if (slap == true)
-            {
-                donor = await GetDeck(1,DeckType.Discard);
-                recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Collect);
-            }
-            // on 'reset'
-            else
-            {
-                donor = await GetDeck(ID, DeckType.Collect);
-                recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
-            }
-            // move cards from 'donor' deck to 'recipient' deck
+            List<DeckCard> donor = await GetDeck(ID, DeckType.Collect);
+            Deck recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
+            await ResetDecks(donor, recipient);
+        }
+
+        /// <summary>
+        /// reassigns all cards in 'Discard' deck to specified player's 'Collect' deck after verified 'Slap'
+        /// </summary>
+        /// <param name="ID"> UserID of player with verified 'slap' </param>
+        /// <returns> completed task </returns>
+        public async Task Slap(int ID)
+        {
+            List<DeckCard> donor = await GetDeck(1, DeckType.Discard);
+            Deck recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Collect);
+            await ResetDecks(donor, recipient);
+        }
+
+        /// <summary>
+        /// (HELPER for public ResetDecks() and Slap() methods)
+        /// reassigns all cards in specified donor deck to specified recipient deck
+        /// </summary>
+        /// <param name="donor"> deck from which cards are to be moved </param>
+        /// <param name="recipient"> deck to which cards are to be moved </param>
+        /// <returns> completed task </returns>
+        private async Task ResetDecks(List<DeckCard> donor, Deck recipient)
+        {
             DeckCard temp = new DeckCard();
             foreach (DeckCard card in donor)
             {
@@ -206,8 +216,6 @@ namespace SpeedWar.Models.Services
                 await UpdateDeckCard(card.CardID, card.DeckID, recipient.ID);
             }
         }
-
-
 
         /// <summary>
         /// checks to see whether either user has run out of cards and declares the other user as winner
