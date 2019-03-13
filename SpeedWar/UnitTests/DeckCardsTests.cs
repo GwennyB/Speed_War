@@ -199,6 +199,119 @@ namespace UnitTests
         }
 
         [Fact]
+        public async Task CanCleanDeck()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("CleanDeck").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.Ace, Suit = Suit.spades };
+                Card card3 = new Card() { ID = 3, Rank = Rank.Ace, Suit = Suit.clubs };
+                Card card4 = new Card() { ID = 4, Rank = Rank.Ace, Suit = Suit.diamonds };
+                await context.Cards.AddAsync(card1);
+                await context.Cards.AddAsync(card2);
+                await context.Cards.AddAsync(card3);
+                await context.Cards.AddAsync(card4);
+                Deck deck = new Deck() { ID = 1, UserID = 3, DeckType = DeckType.Collect };
+                await context.Decks.AddAsync(deck);
+                DeckCard dc1 = new DeckCard() { CardID = 1, DeckID = 1 };
+                DeckCard dc2 = new DeckCard() { CardID = 2, DeckID = 1 };
+                DeckCard dc3 = new DeckCard() { CardID = 3, DeckID = 1 };
+                DeckCard dc4 = new DeckCard() { CardID = 4, DeckID = 1 };
+                await context.DeckCards.AddAsync(dc1);
+                await context.DeckCards.AddAsync(dc2);
+                await context.DeckCards.AddAsync(dc3);
+                await context.DeckCards.AddAsync(dc4);
+                await context.SaveChangesAsync();
+
+                await svc.CleanDeck(deck);
+
+                Assert.Empty(await svc.GetDeck(deck.UserID, deck.DeckType));
+            }
+        }
+
+        [Fact]
+        public void CanCompareCardsTrue()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("CompareCardsTrue").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.Ace, Suit = Suit.spades };
+
+                Assert.True(svc.CompareCards(card1,card2));
+            }
+        }
+
+        [Fact]
+        public void CanCompareCardsFalse()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("CompareCardsFalse").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.King, Suit = Suit.spades };
+
+                Assert.False(svc.CompareCards(card1, card2));
+            }
+        }
+
+        [Fact]
+        public async Task CanFlipReturnCard()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("FlipReturnCard").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.Ace, Suit = Suit.spades };
+                Card card3 = new Card() { ID = 3, Rank = Rank.Ace, Suit = Suit.clubs };
+                Card card4 = new Card() { ID = 4, Rank = Rank.Ace, Suit = Suit.diamonds };
+                await context.Cards.AddAsync(card1);
+                await context.Cards.AddAsync(card2);
+                await context.Cards.AddAsync(card3);
+                await context.Cards.AddAsync(card4);
+                Deck deck = new Deck() { ID = 1, UserID = 3, DeckType = DeckType.Play };
+                await context.Decks.AddAsync(deck);
+                DeckCard dc1 = new DeckCard() { CardID = 1, DeckID = 1 };
+                DeckCard dc2 = new DeckCard() { CardID = 2, DeckID = 1 };
+                DeckCard dc3 = new DeckCard() { CardID = 3, DeckID = 1 };
+                DeckCard dc4 = new DeckCard() { CardID = 4, DeckID = 1 };
+                await context.DeckCards.AddAsync(dc1);
+                await context.DeckCards.AddAsync(dc2);
+                await context.DeckCards.AddAsync(dc3);
+                await context.DeckCards.AddAsync(dc4);
+                await context.SaveChangesAsync();
+
+                Assert.NotNull(await svc.Flip(deck.UserID));
+            }
+        }
+
+        [Fact]
+        public async Task CanFlipReturnNull()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("FlipReturnNull").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                Deck deck = new Deck() { ID = 1, UserID = 3, DeckType = DeckType.Play };
+                await context.Decks.AddAsync(deck);
+                await context.SaveChangesAsync();
+
+                var query = await svc.Flip(deck.UserID);
+                Assert.Null(query);
+            }
+        }
+
+        [Fact]
         public async Task CanResetDecks()
         {
             DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("ResetDecks").Options;
@@ -229,7 +342,7 @@ namespace UnitTests
                 await context.SaveChangesAsync();
 
                 List<DeckCard> queryBefore = await svc.GetDeck(3, DeckType.Collect);
-                await svc.ResetDecks(3, false);
+                await svc.ResetDecks(3);
                 List<DeckCard> queryAfter = await svc.GetDeck(3, DeckType.Play);
 
                 List<int> cardsBefore = new List<int>();
@@ -241,6 +354,52 @@ namespace UnitTests
                 }
 
                 Assert.Equal(cardsBefore,cardsAfter);
+            }
+        }
+
+        [Fact]
+        public async Task CanSlap()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("Slap").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                DeckCardMgmtSvc svc = new DeckCardMgmtSvc(context);
+                Card card1 = new Card() { ID = 1, Rank = Rank.Ace, Suit = Suit.hearts };
+                Card card2 = new Card() { ID = 2, Rank = Rank.Ace, Suit = Suit.spades };
+                Card card3 = new Card() { ID = 3, Rank = Rank.Ace, Suit = Suit.clubs };
+                Card card4 = new Card() { ID = 4, Rank = Rank.Ace, Suit = Suit.diamonds };
+                await context.Cards.AddAsync(card1);
+                await context.Cards.AddAsync(card2);
+                await context.Cards.AddAsync(card3);
+                await context.Cards.AddAsync(card4);
+                Deck deck1 = new Deck() { ID = 1, UserID = 1, DeckType = DeckType.Discard };
+                Deck deck2 = new Deck() { ID = 2, UserID = 3, DeckType = DeckType.Collect };
+                await context.Decks.AddAsync(deck1);
+                await context.Decks.AddAsync(deck2);
+                DeckCard dc1 = new DeckCard() { CardID = 1, DeckID = 1 };
+                DeckCard dc2 = new DeckCard() { CardID = 2, DeckID = 1 };
+                DeckCard dc3 = new DeckCard() { CardID = 3, DeckID = 1 };
+                DeckCard dc4 = new DeckCard() { CardID = 4, DeckID = 1 };
+                await context.DeckCards.AddAsync(dc1);
+                await context.DeckCards.AddAsync(dc2);
+                await context.DeckCards.AddAsync(dc3);
+                await context.DeckCards.AddAsync(dc4);
+                await context.SaveChangesAsync();
+
+                List<DeckCard> queryBefore = await svc.GetDeck(1, DeckType.Discard);
+                await svc.Slap(3);
+                List<DeckCard> queryAfter = await svc.GetDeck(3, DeckType.Collect);
+
+                List<int> cardsBefore = new List<int>();
+                List<int> cardsAfter = new List<int>();
+                for (int i = 0; i < cardsBefore.Count; i++)
+                {
+                    cardsBefore.Add(queryBefore[i].CardID);
+                    cardsAfter.Add(queryAfter[i].CardID);
+                }
+
+                Assert.Equal(cardsBefore, cardsAfter);
             }
         }
 
@@ -282,7 +441,7 @@ namespace UnitTests
                 await context.DeckCards.AddAsync(dc4);
                 await context.SaveChangesAsync();
 
-                Assert.Equal(comp, await svc.CheckWinner(player));
+                Assert.Equal(comp, await svc.CheckWinner(player.ID));
             }
         }
 
@@ -324,7 +483,7 @@ namespace UnitTests
                 await context.DeckCards.AddAsync(dc4);
                 await context.SaveChangesAsync();
 
-                Assert.Equal(player, await svc.CheckWinner(player));
+                Assert.Equal(player, await svc.CheckWinner(player.ID));
             }
         }
 
@@ -366,7 +525,7 @@ namespace UnitTests
                 await context.DeckCards.AddAsync(dc4);
                 await context.SaveChangesAsync();
 
-                Assert.Null(await svc.CheckWinner(player));
+                Assert.Null(await svc.CheckWinner(player.ID));
             }
         }
     }
