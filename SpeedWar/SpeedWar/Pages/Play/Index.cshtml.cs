@@ -29,6 +29,8 @@ namespace SpeedWar.Pages.Play
             if (GameStart == true)
             {
                 Player = player;
+                await _userContext.UpdateFirstCard(player.Name, 53);
+                await _userContext.UpdateSecondCard(player.Name, 54);
                 await _deckCardContext.DealGameAsync(Player.ID);
             }
         }

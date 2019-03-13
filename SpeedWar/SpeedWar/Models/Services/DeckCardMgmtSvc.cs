@@ -228,15 +228,20 @@ namespace SpeedWar.Models.Services
         {
             User player = await _context.Users.FindAsync(ID);
             User comp = await _context.Users.FindAsync(2);
-            List<DeckCard> playUser = await GetDeck(player.ID, DeckType.Play);
-            List<DeckCard> collectUser = await GetDeck(player.ID, DeckType.Collect);
-            List<DeckCard> playComp = await GetDeck(2, DeckType.Play);
-            List<DeckCard> collectComp = await GetDeck(2, DeckType.Collect);
-            if ( playComp.Count == 0 && collectComp.Count == 0)
+            if ( await EmptyDecks(2) )
             { return player; };
-            if (playUser.Count == 0 && collectUser.Count == 0)
+            if (await EmptyDecks(ID))
             { return comp; };
             return null;
+        }
+
+        public async Task<bool> EmptyDecks(int ID)
+        {
+            List<DeckCard> playUser = await GetDeck(ID, DeckType.Play);
+            List<DeckCard> collectUser = await GetDeck(ID, DeckType.Collect);
+            if (playUser.Count == 0 && collectUser.Count == 0)
+            { return true; };
+            return false;
         }
     }
 }

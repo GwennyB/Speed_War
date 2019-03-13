@@ -54,5 +54,50 @@ namespace SpeedWar.Models.Services
             await _context.SaveChangesAsync();
             return user;
         }
+
+        public async Task<Card> GetFirstCard(string username)
+        {
+
+            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name == username);
+            int cardID = query.FirstCard;
+            var card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == cardID);
+            return card;
+        }
+
+        public async Task<Card> GetSecondCard(string username)
+        {
+            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
+            var card = await _context.Cards.FirstOrDefaultAsync(c => c.ID == query.SecondCard);
+            return card;
+        }
+
+        public async Task<bool> GetPlayerTurn(string username)
+        {
+            return (await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower())).PlayerTurn;
+        }
+
+        public async Task UpdateFirstCard(string username, int cardID)
+        {
+            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
+            query.FirstCard = cardID;
+            _context.Users.Update(query);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateSecondCard(string username, int cardID)
+        {
+            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
+            query.SecondCard = cardID;
+            _context.Users.Update(query);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePlayerTurn(string username, bool turn)
+        {
+            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
+            query.PlayerTurn = turn;
+            _context.Users.Update(query);
+            await _context.SaveChangesAsync();
+        }
     }
 }
