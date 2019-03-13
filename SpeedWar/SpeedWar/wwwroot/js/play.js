@@ -7,7 +7,7 @@ var playerTurn = true;
 document.getElementById("sendButton").disabled = true;
 
 
-connection.on("RecieveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
+connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
     console.log(card1Rank);
   
     var li1 = document.getElementById("li1");

@@ -37,9 +37,25 @@ namespace SpeedWar.Hubs
 
 
         //TO-DO: Scaffold PlayHub
-        public async Task SendCard(string card1Rank, string card1Suit, string card2Rank, string card2Suit)
+        public async Task SendCard(Card temp)
         {
-            await Clients.All.SendAsync("RecieveCard", card1Rank, card1Suit, card2Rank, card2Suit);
+            SecondCard = FirstCard;
+            FirstCard = temp;
+            string card1Rank = "null";
+            string card1Suit = "null";
+            string card2Rank = "null";
+            string card2Suit = "null";
+            if (FirstCard != null)
+            {
+                card1Rank = FirstCard.Rank.ToString();
+                card1Suit = FirstCard.Suit.ToString();
+            }
+            if (SecondCard != null)
+            {
+                card2Rank = SecondCard.Rank.ToString();
+                card2Suit = SecondCard.Suit.ToString();
+            }
+            await Clients.All.SendAsync("ReceiveCard", card1Rank, card1Suit, card2Rank, card2Suit);
         }
 
         public async Task ComputerFlip(string secondRank, string secondSuit)
@@ -48,20 +64,9 @@ namespace SpeedWar.Hubs
             //{
                 FirstCard = await _deckCardManager.Flip(2);
 
-                string card1Rank = "null";
-                string card1Suit = "null";
-                if (FirstCard != null)
-                {
-                    card1Rank = FirstCard.Rank.ToString();
-                    card1Suit = FirstCard.Suit.ToString();
-                }
-
-                string card2Rank = secondRank;
-                string card2Suit = secondSuit;
+   
                 await Task.Delay(1000);
-                await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
-                secondRank = card1Rank;
-                secondSuit = card1Suit;    
+                await SendCard(temp);
             //}
         }
 
@@ -85,5 +90,8 @@ namespace SpeedWar.Hubs
             PlayerTurn = false;
             await ComputerFlip(card1Rank, card1Suit);
         }
+
+
+
     }
 }
