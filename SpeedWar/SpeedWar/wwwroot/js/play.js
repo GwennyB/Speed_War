@@ -17,8 +17,8 @@ connection.on("RecieveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
 
     li1.textContent = card1Rank
     li2.textContent = card1Suit
-    li3.textContent = card2Suit
-    li4.textContent = card2Rank
+    li3.textContent = card2Rank
+    li4.textContent = card2Suit
 })
 
 connection.start().then(function () {
