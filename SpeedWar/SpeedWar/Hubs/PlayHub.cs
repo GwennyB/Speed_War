@@ -11,19 +11,18 @@ namespace SpeedWar.Hubs
 {
     public class PlayHub : Hub
     {
-        private IDeckCardManager _deckCardManager;
+        private IDeckCardManager _deck;
         private IUserManager _userManager;
 
         public bool PlayerTurn { get; set; }
         public User CurrentUser { get; set; }
         public Card FirstCard { get; set; }
         public Card SecondCard { get; set; }
-
-
+        public bool EmptyDecks { get; set; }
 
         public PlayHub(IDeckCardManager deckCardManager, IUserManager userManager)
         {
-            _deckCardManager = deckCardManager;
+            _deck = deckCardManager;
             _userManager = userManager;
             PlayerTurn = true;
         }
@@ -58,37 +57,61 @@ namespace SpeedWar.Hubs
             await Clients.All.SendAsync("ReceiveCard", card1Rank, card1Suit, card2Rank, card2Suit);
         }
 
-        public async Task ComputerFlip(string secondRank, string secondSuit)
+        public async Task ComputerFlip()
         {
-            //while (PlayerTurn == false)
-            //{
-                FirstCard = await _deckCardManager.Flip(2);
+            while (PlayerTurn == false)
+            {
+                if (FirstCard.Rank == SecondCard.Rank)
+                {
+                    await Task.Delay(1000);
+                    if (PlayerTurn == false)
+                    {
+                        await _deck.Slap(2);
+                    }
+                }
 
+                Card temp = await _deck.Flip(2);
+
+                if (EmptyDecks == false && temp == null)
+                {
+                    await _deck.ResetDecks(2);
+                    temp = await _deck.Flip(2);
+                    if (temp == null)
+                    {
+                        EmptyDecks = true;
+                    }
+                }
+                else if (temp != null)
+                {
+                    SendCard(temp);
+                }
    
-                await Task.Delay(1000);
-                await SendCard(temp);
-            //}
+            }
         }
 
-        public async Task PlayerFlip(string secondRank, string secondSuit, string userName)
+        public async Task PlayerFlip()
         {
-            PlayerTurn = true;
-            User user = await _userManager.GetUserAsync(userName);
-            FirstCard = await _deckCardManager.Flip(user.ID);
 
-            string card1Rank = "null";
-            string card1Suit = "null";
-            if (FirstCard != null)
+            if (FirstCard.Rank != SecondCard.Rank)
             {
-                card1Rank = FirstCard.Rank.ToString();
-                card1Suit = FirstCard.Suit.ToString();
+                Card temp = await _deck.Flip(CurrentUser.ID);
+                if (temp == null)
+                {
+                    // reset decks
+                    // try again
+                }
+                else
+                {
+                    SendCard(temp);
+                }
             }
 
-            string card2Rank = secondRank;
-            string card2Suit = secondSuit;
-            await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
-            PlayerTurn = false;
-            await ComputerFlip(card1Rank, card1Suit);
+            if (PlayerTurn == true)
+            {
+                PlayerTurn = false;
+                ComputerFlip();
+            }
+
         }
 
 

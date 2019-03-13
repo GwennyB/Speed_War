@@ -15,10 +15,10 @@ connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
     var li3 = document.getElementById("li3");
     var li4 = document.getElementById("li4");
 
-    li1.textContent = card1Rank
-    li2.textContent = card1Suit
-    li3.textContent = card2Rank
-    li4.textContent = card2Suit
+    li1.textContent = card1Rank;
+    li2.textContent = card1Suit;
+    li3.textContent = card2Rank;
+    li4.textContent = card2Suit;
 })
 
 connection.start().then(function () {
