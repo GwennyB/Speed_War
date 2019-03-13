@@ -12,8 +12,8 @@ namespace SpeedWar.Models.Interfaces
         Task<Card> GetFirstCard(string username);
         Task<Card> GetSecondCard(string username);
         Task<bool> GetPlayerTurn(string username);
-        Task<Card> UpdateFirstCard(string username);
-        Task<Card> UpdateSecondCard(string username);
-        Task<bool> UpdatePlayerTurn(string username);
+        Task UpdateFirstCard(string username, int cardId);
+        Task UpdateSecondCard(string username, int cardID);
+        Task UpdatePlayerTurn(string username, bool turn);
     }
 }

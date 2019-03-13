@@ -12,31 +12,30 @@ namespace SpeedWar.Hubs
     public class PlayHub : Hub
     {
         private IDeckCardManager _deck;
-        private IUserManager _userManager;
-
-        public bool PlayerTurn { get; set; }
-        public User CurrentUser { get; set; }
-        public Card FirstCard { get; set; }
-        public Card SecondCard { get; set; }
-        public bool EmptyDecks { get; set; }
+        private IUserManager _user;
 
         public PlayHub(IDeckCardManager deckCardManager, IUserManager userManager)
         {
             _deck = deckCardManager;
-            _userManager = userManager;
+            _user = userManager;
             //PlayerTurn = true;
         }
 
-        public async Task Intro(string username)
-        {
-            CurrentUser = await _userManager.GetUserAsync(username);
-        }
+        //public async Task Intro(string username)
+        //{
+        //    CurrentUser = await _userManager.GetUserAsync(username);
+        //}
 
 
-        public async Task SendCard(Card temp)
+        public async Task SendCard(Card temp, string username)
         {
+            Card FirstCard = await _user.GetFirstCard(username);
+            Card SecondCard = await _user.GetSecondCard(username);
+            await _user.UpdateSecondCard(username, FirstCard.ID);
+            await _user.UpdateFirstCard(username, temp.ID);
             SecondCard = FirstCard;
             FirstCard = temp;
+
             string card1Rank = "null";
             string card1Suit = "null";
             string card2Rank = "null";
@@ -54,16 +53,20 @@ namespace SpeedWar.Hubs
             await Clients.All.SendAsync("ReceiveCard", card1Rank, card1Suit, card2Rank, card2Suit);
         }
 
-        public async Task ComputerFlip()
+        public async Task ComputerFlip(string username)
         {
-            while (PlayerTurn == false)
+            bool PlayerTurn = await _user.GetPlayerTurn(username);
+            Card FirstCard = await _user.GetFirstCard(username);
+            Card SecondCard = await _user.GetSecondCard(username);
+            bool EmptyDecks = await _deck.EmptyDecks(2);
+            while ( PlayerTurn== false)
             {
                 if (FirstCard.Rank == SecondCard.Rank)
                 {
                     await Task.Delay(1000);
                     if (PlayerTurn == false)
                     {
-                        await Slap(2);
+                        await Slap("computer");
                     }
                 }
 
@@ -80,14 +83,19 @@ namespace SpeedWar.Hubs
                 }
                 else if (temp != null)
                 {
-                    SendCard(temp);
+                    SendCard(temp, username);
                 }
    
             }
         }
 
-        public async Task PlayerFlip()
+        public async Task PlayerFlip(string username)
         {
+            User CurrentUser = await _user.GetUserAsync(username);
+            bool PlayerTurn = await _user.GetPlayerTurn(username);
+            Card FirstCard = await _user.GetFirstCard(username);
+            Card SecondCard = await _user.GetSecondCard(username);
+            bool EmptyDecks = await _deck.EmptyDecks(CurrentUser.ID);
 
             if ((FirstCard != null && SecondCard != null && FirstCard.Rank != SecondCard.Rank) || (FirstCard == null || SecondCard == null))
             {
@@ -99,25 +107,29 @@ namespace SpeedWar.Hubs
                 }
                 else
                 {
-                    SendCard(temp);
+                    SendCard(temp, username);
                 }
             }
 
             if (PlayerTurn == true)
             {
                 PlayerTurn = false;
-                ComputerFlip();
+                ComputerFlip(username);
             }
 
         }
 
 
-        public async Task Slap (int ID)
+        public async Task Slap (string username)
         {
+            User CurrentUser = await _user.GetUserAsync(username);
+            bool PlayerTurn = await _user.GetPlayerTurn(username);
+            Card FirstCard = await _user.GetFirstCard(username);
+            Card SecondCard = await _user.GetSecondCard(username);
             PlayerTurn = true;
             if (FirstCard == SecondCard)
             {
-                await _deck.Slap(ID);
+                await _deck.Slap(CurrentUser.ID);
             }
         }
 

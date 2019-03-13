@@ -1,8 +1,8 @@
 ﻿'use strict'
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
-var player = document.getElementById("player").textContent;
-connection.invoke("Intro", player);
+//var player = document.getElementById("player").textContent;
+//connection.invoke("Intro", player);
 var playerTurn = true;
 document.getElementById("sendButton").disabled = true;
 
@@ -26,23 +26,21 @@ connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
 connection.start().then(function () {
     event.preventDefault(); 
     document.getElementById("sendButton").disabled = false;
-    var player = document.getElementById("player").textContent;
-    connection.invoke("Intro", player);
+    //var player = document.getElementById("player").textContent;
+    //connection.invoke("Intro", player);
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
     event.preventDefault(); 
-    var player = document.getElementById("player").textContent;
-    connection.invoke("Intro", player);
 
     playerTurn = true;
     var userName = document.getElementById("player").textContent;
     var secondRank = document.getElementById("li1").textContent;
     var secondSuit = document.getElementById("li2").textContent;
     console.log(secondSuit);
-    connection.invoke("PlayerFlip").catch(function (err) {
+    connection.invoke("PlayerFlip", userName).catch(function (err) {
         return console.error(err.toString());
     });
 });

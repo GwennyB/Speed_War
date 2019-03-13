@@ -19,5 +19,6 @@ namespace SpeedWar.Models.Interfaces
         Task ResetDecks(int ID);
         Task Slap(int ID);
         Task<User> CheckWinner(int ID);
+        Task<bool> EmptyDecks(int ID);
     }
 }
