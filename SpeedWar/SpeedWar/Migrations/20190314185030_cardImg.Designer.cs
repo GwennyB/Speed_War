@@ -9,8 +9,8 @@ using SpeedWar.Data;
 namespace SpeedWar.Migrations
 {
     [DbContext(typeof(CardDbContext))]
-    [Migration("20190314170516_int")]
-    partial class @int
+    [Migration("20190314185030_cardImg")]
+    partial class cardImg
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

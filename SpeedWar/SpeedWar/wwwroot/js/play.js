@@ -1,4 +1,5 @@
 ﻿'use strict'
+console.log("I'm connected");
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 var pauseGame = true;
@@ -13,17 +14,23 @@ var compDecksEmpty;
 connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
     event.preventDefault(); 
 
-    console.log(card1Rank);
+    //console.log(card1Rank);
   
-    var li1 = document.getElementById("li1");
-    var li2 = document.getElementById("li2");
-    var li3 = document.getElementById("li3");
-    var li4 = document.getElementById("li4");
+    //var li1 = document.getElementById("li1");
+    //var li2 = document.getElementById("li2");
+    //var li3 = document.getElementById("li3");
+    //var li4 = document.getElementById("li4");
 
-    li1.textContent = card1Rank;
-    li2.textContent = card1Suit;
-    li3.textContent = card2Rank;
-    li4.textContent = card2Suit;
+    var DOM_img = document.getElementById("img1");
+    DOM_img.src = card1Suit;
+
+    var dom_img = document.getElementById("img2");
+    dom_img.src = card2Suit;
+
+    //li1.textContent = card1Rank;
+    //li2.textContent = card1Suit;
+    //li3.textContent = card2Rank;
+    //li4.textContent = card2Suit;
 
     if (card1Rank === card2Rank) {
         match = true;
@@ -41,10 +48,8 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    event.preventDefault(); 
-    var secondRank = document.getElementById("li1").textContent;
-    var secondSuit = document.getElementById("li2").textContent;
-    console.log(secondSuit);
+    console.log("did a thing")
+    event.preventDefault();
  });
 
 
@@ -62,12 +67,13 @@ document.getElementById("first-card").addEventListener("click", function (event)
 });
 
 
-document.getElementById("second-card").addEventListener("click", function (event) {
+document.getElementById("userDeck").addEventListener("click", function (event) {
+    console.log("been clicked");
     event.preventDefault();
     slap = false;
-    var secondRank = document.getElementById("li1").textContent;
-    var secondSuit = document.getElementById("li2").textContent;
-    console.log(secondSuit);
+    //var secondRank = document.getElementById("li1").textContent;
+    //var secondSuit = document.getElementById("li2").textContent;
+    //console.log(secondSuit);
     console.log("match: ", match);
     console.log("slap: ", slap);
     if (!match) {
