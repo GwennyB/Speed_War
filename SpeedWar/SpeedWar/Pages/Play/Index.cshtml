@@ -5,14 +5,16 @@
 
 <link rel="stylesheet" type="text/css" href="~/Play.css">
 <h1>Speed War</h1>
-<button id="sendButton"> button </button>
+@*<button id="sendButton"> button </button>*@
 
 @*DO NOT DELETE ME... I'M IMPORTANT!!!*@
 <p id="player" display="none">@Model.Player.Name</p>
 <div id="deck">
     <div id="userdeck">
-<img style="width:60px;height:100px" src="~/Assets/PNG/yellow_back.png" />
-        </div>
+        <button id="sendButton">
+            <img style="width:60px;height:100px" src="~/Assets/PNG/yellow_back.png" />
+        </button>       
+    </div>
 <ol id="first-card">
     <li id="li1">*</li>
     <li id="li2">*</li>
