@@ -16,8 +16,8 @@ namespace SpeedWar.Hubs
         /// <summary>
         /// create a PlayHub constructor
         /// </summary>
-        /// <param name="deckCardManager"></param>
-        /// <param name="userManager"></param>
+        /// <param name="deckCardManager">IDeckCardManager</param>
+        /// <param name="userManager">IuserManger</param>
         public PlayHub(IDeckCardManager deckCardManager, IUserManager userManager)
         {
             _deck = deckCardManager;
@@ -27,8 +27,8 @@ namespace SpeedWar.Hubs
         /// <summary>
         /// send two cards eventually from player side and computer side to play.js and play.js can use the cards to render them on the page
         /// </summary>
-        /// <param name="temp">container temp card will be used when switch two cards, player's name</param>
-        /// <param name="username"></param>
+        /// <param name="temp">container temp card will be used when switch two cards </param>
+        /// <param name="username">player's name</param>
         /// <returns></returns>
         public async Task SendCard(Card temp, string username)
         {
