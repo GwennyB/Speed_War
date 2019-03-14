@@ -116,5 +116,54 @@ namespace UnitTests
                 Assert.NotNull(query);
             }
         }
+
+        [Fact]
+        public async Task CanUpdateFirstCard()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("TestUserCards").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                UserMgmtSvc svc = new UserMgmtSvc(context);
+
+                User user = await svc.GetUserAsync("test");
+                user.FirstCard = 1;
+                await svc.UpdateFirstCard("test", 1);
+                Assert.Equal(1, user.FirstCard);    
+            }
+        }
+
+        [Fact]
+        public async Task CanUpdateSecondCard()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("TestUserCards").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                UserMgmtSvc svc = new UserMgmtSvc(context);
+
+                User user = await svc.GetUserAsync("test");
+                user.SecondCard = 1;
+                await svc.UpdateFirstCard("test", 1);
+                Assert.Equal(1, user.SecondCard);
+            }
+        }
+
+        [Fact]
+        public async Task CanUpdateUserTurn()
+        {
+            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("TestUserCards").Options;
+
+            using (CardDbContext context = new CardDbContext(options))
+            {
+                UserMgmtSvc svc = new UserMgmtSvc(context);
+
+                User user = await svc.GetUserAsync("test");
+                user.PlayerTurn = true;
+                await svc.UpdatePlayerTurn("test", false);
+                Assert.False(user.PlayerTurn);
+            }
+        }
+
     }
 }
