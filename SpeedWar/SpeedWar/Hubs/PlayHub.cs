@@ -83,10 +83,11 @@ namespace SpeedWar.Hubs
 
         public async Task Slap(string playerName, string slapBy)
         {
-
+            string card = (await _user.GetFirstCard(playerName)).ImageURL;
             {
                 await _deck.Slap(slapBy); // (slapper.ID);
             }
+            await Clients.All.SendAsync("collectCards", slapBy, card);
             string loser = (slapBy == playerName) ? "computer" : playerName;
             if (await CheckDecks(loser))
             {

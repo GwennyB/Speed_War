@@ -130,5 +130,17 @@ connection.on("endGame", function (winner) {
     document.getElementById("winner-page").display = block;
 });
 
+connection.on("collectCards", function (playerName, card) {
+    console.log("COLLECT CARDS ");
+    console.log(playerName);
+    console.log(card);
+    if (playerName == "computer") {
+        document.getElementById("computer-collection").src = card;
+    }
+    else {
+        document.getElementById("user-collection").src = card;
+    }
+})
+
 
 
