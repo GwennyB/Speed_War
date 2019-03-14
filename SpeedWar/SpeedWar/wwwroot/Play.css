@@ -35,6 +35,18 @@ h1{
     position: absolute;
     top: 20vw;
     left: 20vh;
+    background-color: bisque;
+}
+#slap-page {
+    width: 60vw;
+    height: 60vh;
+    position: absolute;
+    top: 20vw;
+    left: 20vh;
+    background-color: bisque;
+}
+#slap-page {
+    font-size: 3em;
 }
 
 .hidden{
