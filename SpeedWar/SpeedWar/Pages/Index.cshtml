@@ -6,7 +6,6 @@
 <html>
 <head>
     <meta charset="utf-8" />
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>Page Title</title>
@@ -20,13 +19,30 @@
 <body>
     <div class="container">
         <form method="post">
-            <label class="three" asp-for="Username"></label>
-            <input id="username" asp-for="Username" />
-            <button type="submit" onclick="responsiveVoice.speak('Start Game');" >Start game!</button>
+            <label class="three" contextmenu="Name"></label>
+            <input id="username" asp-for="Username" placeholder="User Name" />
+            <button type="submit">Start game!</button>
 
         </form>
+        <button class="inst">Instruction</button>
 
     </div>
+    <div class="instruction hidden">
+        <button class="inst">Close Instruction</button>
+        <ol>
+            <li> <span class="title">Login: </span> On page load, enter in a username. Click start game. This will take you to the game page. </li>
+            <li> <span class="title">Start Game: </span> In the top corner of the page, there is a button that reads START. Click the button to deal cards and trigger the game start. Click your card deck (yellow) to flip the first card. </li>
+            <li>  <span class="title">Flip Card: </span> After the computer flips a card, it’s your turn again! Click your deck to flip a card. </li>
+            <li> <span class="title">Slap Card: </span> While you and the computer are flipping cards, if you see a card with matching values, slap the card! Do this by click the card, or by hitting the spacebar. Careful, if you don’t slap the card, or flip a card when there was a match, the computer will slap the card.</li>
+            <li><span class="title">Round Winner:</span>When a slap happens, the person who slapped the cards wins that round. The winner gets all the cards that have been played, and they are placed in their collection pile. It is then the winner’s turn to start the game again, by flipping first. </li>
+            <li><span class="title"> Out of Cards: </span> When a player is out of cards in their play deck, their collection deck is shuffled and becomes the play deck. If the play deck and the collection deck are completely empty, all a player can do is wait for a slap while the other player continues to flip cards. If they get a slap, and get the cards in the middle, they continue to play. If the other player gets the slap, and holds all the cards, they win. </li>
+            <li><span class="title"> Winning the Game: </span> The game always ends on a slap. If after a slap, one player has all the cards, and another player has none, the player with all the cards wins. </li>
+            <li><span class="title"> Start a New Game: </span> After someone wins, a page will pop up to inform you if you won or lost. It will also ask if you would like to play again. Click “Play Again” to trigger a new game.</li>
+        </ol>
+    </div>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="~/js/app.js"></script>
 </body>
 </html>
-<script src='https://code.responsivevoice.org/responsivevoice.js'></script>

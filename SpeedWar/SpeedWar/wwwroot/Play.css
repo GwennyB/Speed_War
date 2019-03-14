@@ -6,16 +6,19 @@ h1{
     text-align:center;
 }
 #first-card {
+    position: absolute;
     display: inline-block;
     height: 200px;
     width: 100px;
+    margin-top: -2.5em;
 }
 
 #second-card {
     display: inline-block;
     height: 200px;
     width: 100px;
-    margin-left:6em;
+    margin-left: 2em;
+    margin-top: 3.5em;
 }
 
 #img1{
@@ -24,5 +27,17 @@ h1{
 
 #deck{
     text-align:center;
+}
+
+#winner-page{
+    width: 60vw;
+    height: 60vh;
+    position: absolute;
+    top: 20vw;
+    left: 20vh;
+}
+
+.hidden{
+    display: none;
 }
 
