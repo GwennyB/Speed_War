@@ -241,7 +241,11 @@ namespace SpeedWar.Models.Services
             { return comp; };
             return null;
         }
-
+        /// <summary>
+        /// check if the deck is empty
+        /// </summary>
+        /// <param name="ID">user's ID</param>
+        /// <returns>boolean true if it is empty</returns>
         public async Task<bool> EmptyDecks(int ID)
         {
             List<DeckCard> playUser = await GetDeck(ID, DeckType.Play);
