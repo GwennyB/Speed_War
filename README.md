@@ -1,5 +1,5 @@
 # Introduction 
-Speed War emulates the card game of the same name that pits the user (player) against the computer. It uses web sockets (SignalR) to maintain an open connection and constant client-server communication; that is, the user does not need to refresh the page to see game status updates since they are delivered and rendered real-time.
+Speed War emulates the card game of the same name that pits the user (player) against the computer. It uses web sockets (SignalR) to maintain an open connection and constant client-server communication; that is, the user does not need to refresh the page to see game status updates since they are delivered and rendered real-time.  
 Upon game start, the user and computer begin taking turns flipping cards from their play decks into a common discard pile. When the top 2 cards match in rank, the computer and player can "slap" the card pile to claim all the cards in the pile. The next round begins with the winner flipping the top card of their deck. Game play continues until either the player of the computer is out of cards. 
 
 ## Getting Started
@@ -25,6 +25,11 @@ Tests include:
 ## Architecture
 
 ![db schema](assets/schema.png)
+- User: Users are created upon login. They a primary key of ID, and a property of name.
+- Deck: Decks are created when a new user is created. Decks contain a Primary Key of ID, and properties of UserID and Deck Type. Deck Type is an enum containing Discard, Play, and Collect.
+- DeckCard: DeckCard is a join table that connects Cards and Decks. It has no properties, but has a composite key of DeckID and CardID.
+- Card: Cards have a suit and a rank based on a standard deck of 52 cards. They also have a Primary Key of ID. They exist in the database, and are readonly. Players will never create, update or delete a card.  
+
 
 
 
