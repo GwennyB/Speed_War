@@ -49,39 +49,53 @@ namespace SpeedWar.Hubs
         public async Task ComputerFlip(string username)
         {
             User player = await _user.GetUserAsync(username);
-            bool playerTurn = player.PlayerTurn;
+            //bool playerTurn = player.PlayerTurn;
+
+            //await Task.Delay(1000);
+
+            //while ( playerTurn == false)
+            //{
+            //if (await CheckMatch(username))
+            //{
+            //if (playerTurn == false)
+            //{
+            //await Slap(player.Name, "computer");
+            //}
+            //}
+            Card temp;
+            if (!(await CheckDecks("computer")))
+            {
+                temp = await _deck.Flip(2);
+            }
+            else
+            {
+                await _deck.ResetDecks(2);
+                temp = await _deck.Flip(2);
+            }
+            if (temp != null)
+            {
+                //await Task.Delay(2000);
+                await SendCard(temp, username);
+            }
+
+                //if (await CheckMatch(username))
+                //{
+                //    await Task.Delay(1000);
+                //    //if (playerTurn == false)
+                //    //{
+                //    await Slap(player.Name, "computer");
+                //    //}
+                //}
+
+            //}
+        }
+
+        private async Task<bool> CheckMatch(string username)
+        {
             Card FirstCard = await _user.GetFirstCard(username);
             Card SecondCard = await _user.GetSecondCard(username);
-            bool EmptyDecks = await _deck.EmptyDecks(player.ID);
-            while ( playerTurn == false)
-            {
-                if (FirstCard.Rank == SecondCard.Rank)
-                {
-                    await Task.Delay(1000);
-                    if (playerTurn == false)
-                    {
-                        await Task.Delay(1000);
-                    }
-                }
-
-                Card temp = await _deck.Flip(2);
-
-                if (EmptyDecks == false && temp == null)
-                {
-                    await _deck.ResetDecks(2);
-                    temp = await _deck.Flip(2);
-                    if (temp == null)
-                    {
-                        EmptyDecks = true;
-                    }
-                }
-                else if (temp != null)
-                {
-                    await Task.Delay(4000);
-                    await SendCard(temp, username);
-                }
-   
-            }
+            if (FirstCard.Rank == SecondCard.Rank) return true;
+            return false;
         }
 
         public async Task PlayerFlip(string username)
@@ -91,51 +105,53 @@ namespace SpeedWar.Hubs
             Card FirstCard = await _user.GetFirstCard(username);
             Card SecondCard = await _user.GetSecondCard(username);
             bool EmptyDecks = await _deck.EmptyDecks(player.ID);
-
             
-            if ((FirstCard.ID != 53 && SecondCard.ID != 54 && FirstCard.Rank == SecondCard.Rank))
-            {
-                await Slap(player.Name, "computer"); 
-            }
+            //if ((FirstCard.ID != 53 && SecondCard.ID != 54 && FirstCard.Rank == SecondCard.Rank))
+            //{
+            //    //await Task.Delay(1000);
+            //}
 
-            else
-            {
-                Card temp = await _deck.Flip(player.ID);
-                if (temp == null)
+            //else
+            //{
+                Card temp;
+                if (!(await CheckDecks(username)))
                 {
-                    await _deck.ResetDecks(2);
-                    temp = await _deck.Flip(player.ID);
+                    temp = await _deck.Flip(2);
                 }
                 else
                 {
+                    await _deck.ResetDecks(2);
+                    temp = await _deck.Flip(2);
+                }
+                if (temp != null)
+                {
                     await SendCard(temp, username);
                 }
-            }
-
-            if ( playerTurn == true)
-            {
-                await _user.UpdatePlayerTurn(username, false);
-            }
-
+            //}
+            await Task.Delay(2000);
         }
 
 
         public async Task Slap (string playerName, string slapBy)
         {
-            if (slapBy != "computer")
+
+            //User player = await _user.GetUserAsync(playerName);
+            //User slapper = await _user.GetUserAsync(slapBy);
+            //Card FirstCard = await _user.GetFirstCard(playerName);
+            //Card SecondCard = await _user.GetSecondCard(playerName);
+            //if (FirstCard == SecondCard)
             {
-                await Clients.All.SendAsync("PauseGame");
+                await _deck.Slap(slapBy); // (slapper.ID);
+                await Clients.All.SendAsync("CompSlap");
             }
-            await _user.UpdatePlayerTurn(playerName, true);
-            User slapper = await _user.GetUserAsync(slapBy);
-            Card FirstCard = await _user.GetFirstCard(playerName);
-            Card SecondCard = await _user.GetSecondCard(playerName);
-            if (FirstCard == SecondCard)
-            {
-                await _deck.Slap(slapper.ID);
-            }
+            //return await _deck.CheckWinner(player.ID);
         }
 
+        public async Task<bool> CheckDecks(string username)
+        {
+            var player = await _user.GetUserAsync(username);
+            return await _deck.EmptyDecks(player.ID);
+        }
 
     }
 }
