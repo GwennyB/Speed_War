@@ -18,11 +18,14 @@ The application is ready to run via your local/live server or your chosen deploy
 
 ### Tests
 The test suite is built in xUnit. Once the app is built as described above, all tests can be run using the 'Run All' command in the Test Explorer.  
-
+Tests include:
+- Getters and Setters of all models.
+- CRUD tests of all methods in the User Service and the DeckCard Service.
 
 ## Architecture
 
-![db schema](assets/schema.png)  
+![db schema](assets/schema.png)
+
 
 
 ## Credit & Acknowledgement
@@ -33,7 +36,7 @@ This project is a collaborative effort by
   - Gwen Zubatch: https://github.com/GwennyB  
 
 Third party content:  
-TODO: TBD
+- [SignalR](https://dotnet.microsoft.com/apps/aspnet/real-time)
 
 
 ## Contribute
