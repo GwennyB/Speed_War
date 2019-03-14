@@ -10,6 +10,7 @@ namespace SpeedWar.Models
         public int ID { get; set; }
         public Suit Suit { get; set; }
         public Rank Rank { get; set; }
+        public string ImageURL { get; set; }
     }
 
     public enum Suit

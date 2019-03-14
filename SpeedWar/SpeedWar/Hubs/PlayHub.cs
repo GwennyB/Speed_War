@@ -35,13 +35,15 @@ namespace SpeedWar.Hubs
             string card2Suit = "null";
             if (FirstCard.ID != 53)
             {
-                card1Rank = FirstCard.Rank.ToString();
-                card1Suit = FirstCard.Suit.ToString();
+                card1Suit = FirstCard.ImageURL;
+                //card1Rank = FirstCard.Rank.ToString();
+                //card1Suit = FirstCard.Suit.ToString();
             }
             if (SecondCard.ID != 54)
             {
-                card2Rank = SecondCard.Rank.ToString();
-                card2Suit = SecondCard.Suit.ToString();
+                card2Suit = SecondCard.ImageURL;
+                //card2Rank = SecondCard.Rank.ToString();
+                //card2Suit = SecondCard.Suit.ToString();
             }
             await Clients.All.SendAsync("ReceiveCard", card1Rank, card1Suit, card2Rank, card2Suit);
         }
