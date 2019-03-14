@@ -35,7 +35,8 @@ connection.start().then(function () {
     event.preventDefault(); 
     document.getElementById("sendButton").disabled = false;
     userName = document.getElementById("player").textContent;
-}).catch(function (err) {
+})
+    .catch(function (err) {
     return console.error(err.toString());
 });
 
@@ -47,18 +48,17 @@ document.getElementById("sendButton").addEventListener("click", function (event)
  });
 
 
-
-
 document.getElementById("first-card").addEventListener("click", function (event) {
     event.preventDefault();
+    slap =true;
     console.log("player slap");
     console.log("slap: ", slap);
     console.log("match: ", match);
-    if (slap === false && match === true) {
-        slap = true;
+    if (match === true) {
         connection.invoke("Slap", userName, userName);
         match = false;
     }
+    slap = false;
 });
 
 
@@ -69,32 +69,20 @@ document.getElementById("second-card").addEventListener("click", function (event
     var secondSuit = document.getElementById("li2").textContent;
     console.log(secondSuit);
     console.log("match: ", match);
-    checkUserDecks(userName)
-        .then(function (result) {
-            console.log("result: ", result);
-            userDecksEmpty = result;
-        })
-
-    console.log("userdecksempty: ", userDecksEmpty);
-    if (!match && !userDecksEmpty) {
-        console.log("inside playerflip");
-        connection.invoke("PlayerFlip", userName).catch(function (err) {
-            return console.error(err.toString());
-        })
-    } else if (match) {
-        console.log("computer slap");
-
-        connection.invoke("Slap", userName, "computer").catch(function (err) {
-            return console.error(err.toString());
-        });
-        match = false;
+    console.log("slap: ", slap);
+    if (!match) {
+        playerFlip();
+    } else if (match && !slap) {
+        compSlap();
     }
-    console.log("call compflip")
-    compFlip(userName);
-
+    compFlip();
+    if (match && !slap) {
+        compSlap();
+    }
 });
 
-function compFlip(userName) {
+function compFlip() {
+    console.log("compflip")
     if (compDecksEmpty) {
         console.log("comp decks empty");
     }
@@ -104,19 +92,21 @@ function compFlip(userName) {
             return console.error(err.toString());
         })
     }
-}
+};
 
-function checkUserDecks() {
+function compSlap() {
+    console.log("compslap");
 
-}
+    connection.invoke("Slap", userName, "computer").catch(function (err) {
+        return console.error(err.toString());
+    });
+    match = false;
+};
 
-//connection.on("CompSlap", function () {
-//    event.preventDefault();
-
-//    slap = true;
-
-//});
-
-
-
+function playerFlip() {
+    console.log("playerflip");
+    connection.invoke("PlayerFlip", userName).catch(function (err) {
+        return console.error(err.toString());
+    })
+};
 

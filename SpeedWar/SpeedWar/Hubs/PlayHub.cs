@@ -49,45 +49,20 @@ namespace SpeedWar.Hubs
         public async Task ComputerFlip(string username)
         {
             User player = await _user.GetUserAsync(username);
-            //bool playerTurn = player.PlayerTurn;
 
-            //await Task.Delay(1000);
-
-            //while ( playerTurn == false)
-            //{
-            //if (await CheckMatch(username))
-            //{
-            //if (playerTurn == false)
-            //{
-            //await Slap(player.Name, "computer");
-            //}
-            //}
-            Card temp;
-            if (!(await CheckDecks("computer")))
-            {
-                temp = await _deck.Flip(2);
-            }
-            else
+            Card temp = await _deck.Flip(2);
+            if (temp == null)
             {
                 await _deck.ResetDecks(2);
                 temp = await _deck.Flip(2);
             }
             if (temp != null)
             {
-                //await Task.Delay(2000);
                 await SendCard(temp, username);
             }
 
-                //if (await CheckMatch(username))
-                //{
-                //    await Task.Delay(1000);
-                //    //if (playerTurn == false)
-                //    //{
-                //    await Slap(player.Name, "computer");
-                //    //}
-                //}
+            await Task.Delay(1000);
 
-            //}
         }
 
         private async Task<bool> CheckMatch(string username)
@@ -101,34 +76,19 @@ namespace SpeedWar.Hubs
         public async Task PlayerFlip(string username)
         {
             User player = await _user.GetUserAsync(username);
-            bool playerTurn = player.PlayerTurn;
-            Card FirstCard = await _user.GetFirstCard(username);
-            Card SecondCard = await _user.GetSecondCard(username);
-            bool EmptyDecks = await _deck.EmptyDecks(player.ID);
-            
-            //if ((FirstCard.ID != 53 && SecondCard.ID != 54 && FirstCard.Rank == SecondCard.Rank))
-            //{
-            //    //await Task.Delay(1000);
-            //}
 
-            //else
-            //{
-                Card temp;
-                if (!(await CheckDecks(username)))
+                Card temp = await _deck.Flip(player.ID);
+                if (temp == null)
                 {
-                    temp = await _deck.Flip(2);
-                }
-                else
-                {
-                    await _deck.ResetDecks(2);
-                    temp = await _deck.Flip(2);
+                    await _deck.ResetDecks(player.ID);
+                    temp = await _deck.Flip(player.ID);
                 }
                 if (temp != null)
                 {
                     await SendCard(temp, username);
                 }
-            //}
-            await Task.Delay(2000);
+
+            await Task.Delay(1000);
         }
 
 
