@@ -30,22 +30,22 @@ namespace SpeedWar.Hubs
             await _user.UpdateFirstCard(username, FirstCard.ID);
 
             string card1Rank = "null";
-            string card1Suit = "null";
+            string card1Img = "null";
             string card2Rank = "null";
-            string card2Suit = "null";
+            string card2Img = "null";
             if (FirstCard.ID != 53)
             {
-                card1Suit = FirstCard.ImageURL;
-                //card1Rank = FirstCard.Rank.ToString();
+                card1Img = FirstCard.ImageURL;
+                card1Rank = FirstCard.Rank.ToString();
                 //card1Suit = FirstCard.Suit.ToString();
             }
             if (SecondCard.ID != 54)
             {
-                card2Suit = SecondCard.ImageURL;
-                //card2Rank = SecondCard.Rank.ToString();
+                card2Img = SecondCard.ImageURL;
+                card2Rank = SecondCard.Rank.ToString();
                 //card2Suit = SecondCard.Suit.ToString();
             }
-            await Clients.All.SendAsync("ReceiveCard", card1Rank, card1Suit, card2Rank, card2Suit);
+            await Clients.All.SendAsync("ReceiveCard", card1Rank, card1Img, card2Rank, card2Img);
         }
 
         public async Task ComputerFlip(string username)
