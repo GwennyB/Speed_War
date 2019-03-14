@@ -1,5 +1,5 @@
 ﻿body {
-    background-color:papayawhip;
+    background-color:whitesmoke;
 }
 label {
     font-size: 10px;
@@ -13,7 +13,7 @@ label {
     box-shadow: 0 0 15px rgba(14,41,57,0.12),0 2px 5px rgba(14,41,57,0.44),inset 0 -1px 2px rgba(14,41,57,0.15);
     float: left;
     padding: 10px 50px 10;
-    background-image: url(https://www.hominter.com/image/cache/catalog/mosaic-tiles/B963-3-800x800.jpg);
+    background-image: url(Assets/cardwall.jpg);
     margin: 2% 30%;
     border-radius: 5px
 }
