@@ -17,11 +17,13 @@ namespace SpeedWar.Models
         hearts,
         spades,
         diamonds,
-        clubs
+        clubs,
+        NA = 0
     }
 
     public enum Rank
     {
+        NA = 0,
         Ace = 1,
         Two = 2,
         Three = 3,

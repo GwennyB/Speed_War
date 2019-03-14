@@ -84,11 +84,15 @@ namespace SpeedWar.Models.Services
         public async Task DealGameAsync(int ID)
         {
             Deck player = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Play);
+            Deck playerColl = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Collect);
             Deck computer = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Play);
+            Deck computerColl = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 2 && d.DeckType == DeckType.Collect);
             Deck discard = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == 1 && d.DeckType == DeckType.Discard);
             await CleanDeck(player);
             await CleanDeck(computer);
             await CleanDeck(discard);
+            await CleanDeck(playerColl);
+            await CleanDeck(computerColl);
             await DealGameAsync(player, computer);
         }
 
@@ -102,6 +106,8 @@ namespace SpeedWar.Models.Services
         private async Task DealGameAsync(Deck player, Deck computer)
         {
             List<Card> cards = await GetAllCardsAsync();
+            cards.Remove(cards.FirstOrDefault(c => c.ID == 53));
+            cards.Remove(cards.FirstOrDefault(c => c.ID == 54));
             Random random = new Random();
             int rnd;
             Deck current = player;
@@ -195,10 +201,11 @@ namespace SpeedWar.Models.Services
         /// </summary>
         /// <param name="ID"> UserID of player with verified 'slap' </param>
         /// <returns> completed task </returns>
-        public async Task Slap(int ID)
+        public async Task Slap(string username)
         {
+            User slapper = await _context.Users.FirstOrDefaultAsync(u => u.Name == username);
             List<DeckCard> donor = await GetDeck(1, DeckType.Discard);
-            Deck recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == ID && d.DeckType == DeckType.Collect);
+            Deck recipient = await _context.Decks.FirstOrDefaultAsync(d => d.UserID == slapper.ID && d.DeckType == DeckType.Collect);
             await ResetDecks(donor, recipient);
         }
 

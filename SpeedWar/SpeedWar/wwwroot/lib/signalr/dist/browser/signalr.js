@@ -3056,8 +3056,8 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
-var SHUTDOWN_TIMEOUT = 5 * 1000;
+// TODO: update timeout
+var SHUTDOWN_TIMEOUT = 30 * 1000;
 // Not exported from 'index', this type is internal.
 /** @private */
 var LongPollingTransport = /** @class */ (function () {

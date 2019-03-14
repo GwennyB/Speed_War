@@ -17,7 +17,7 @@ namespace SpeedWar.Models.Interfaces
         Task<Card> Flip(int ID);
         //void EndGame(int ID);
         Task ResetDecks(int ID);
-        Task Slap(int ID);
+        Task Slap(string username);
         Task<User> CheckWinner(int ID);
         Task<bool> EmptyDecks(int ID);
     }
