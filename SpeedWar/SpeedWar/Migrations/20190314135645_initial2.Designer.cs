@@ -9,14 +9,14 @@ using SpeedWar.Data;
 namespace SpeedWar.Migrations
 {
     [DbContext(typeof(CardDbContext))]
-    [Migration("20190311175253_initial")]
-    partial class initial
+    [Migration("20190314135645_initial2")]
+    partial class initial2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -25,6 +25,8 @@ namespace SpeedWar.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ImageURL");
 
                     b.Property<int>("Rank");
 
@@ -38,314 +40,378 @@ namespace SpeedWar.Migrations
                         new
                         {
                             ID = 1,
+                            ImageURL = "/Assets/AH.png",
                             Rank = 1,
                             Suit = 0
                         },
                         new
                         {
                             ID = 2,
+                            ImageURL = "/Assets/2H.png",
                             Rank = 2,
                             Suit = 0
                         },
                         new
                         {
                             ID = 3,
+                            ImageURL = "/Assets/3H.png",
                             Rank = 3,
                             Suit = 0
                         },
                         new
                         {
                             ID = 4,
+                            ImageURL = "/Assets/4H.png",
                             Rank = 4,
                             Suit = 0
                         },
                         new
                         {
                             ID = 5,
+                            ImageURL = "/Assets/5H.png",
                             Rank = 5,
                             Suit = 0
                         },
                         new
                         {
                             ID = 6,
+                            ImageURL = "/Assets/6H.png",
                             Rank = 6,
                             Suit = 0
                         },
                         new
                         {
                             ID = 7,
+                            ImageURL = "/Assets/7H.png",
                             Rank = 7,
                             Suit = 0
                         },
                         new
                         {
                             ID = 8,
+                            ImageURL = "/Assets/8H.png",
                             Rank = 8,
                             Suit = 0
                         },
                         new
                         {
                             ID = 9,
+                            ImageURL = "/Assets/9H.png",
                             Rank = 9,
                             Suit = 0
                         },
                         new
                         {
                             ID = 10,
+                            ImageURL = "/Assets/10H.png",
                             Rank = 10,
                             Suit = 0
                         },
                         new
                         {
                             ID = 11,
+                            ImageURL = "/Assets/JH.png",
                             Rank = 11,
                             Suit = 0
                         },
                         new
                         {
                             ID = 12,
+                            ImageURL = "/Assets/QH.png",
                             Rank = 12,
                             Suit = 0
                         },
                         new
                         {
                             ID = 13,
+                            ImageURL = "/Assets/KH.png",
                             Rank = 13,
                             Suit = 0
                         },
                         new
                         {
                             ID = 14,
+                            ImageURL = "/Assets/AS.png",
                             Rank = 1,
                             Suit = 1
                         },
                         new
                         {
                             ID = 15,
+                            ImageURL = "/Assets/2S.png",
                             Rank = 2,
                             Suit = 1
                         },
                         new
                         {
                             ID = 16,
+                            ImageURL = "/Assets/3S.png",
                             Rank = 3,
                             Suit = 1
                         },
                         new
                         {
                             ID = 17,
+                            ImageURL = "/Assets/4S.png",
                             Rank = 4,
                             Suit = 1
                         },
                         new
                         {
                             ID = 18,
+                            ImageURL = "/Assets/5S.png",
                             Rank = 5,
                             Suit = 1
                         },
                         new
                         {
                             ID = 19,
+                            ImageURL = "/Assets/6S.png",
                             Rank = 6,
                             Suit = 1
                         },
                         new
                         {
                             ID = 20,
+                            ImageURL = "/Assets/7S.png",
                             Rank = 7,
                             Suit = 1
                         },
                         new
                         {
                             ID = 21,
+                            ImageURL = "/Assets/8S.png",
                             Rank = 8,
                             Suit = 1
                         },
                         new
                         {
                             ID = 22,
+                            ImageURL = "/Assets/9S.png",
                             Rank = 9,
                             Suit = 1
                         },
                         new
                         {
                             ID = 23,
+                            ImageURL = "/Assets/10S.png",
                             Rank = 10,
                             Suit = 1
                         },
                         new
                         {
                             ID = 24,
+                            ImageURL = "/Assets/JS.png",
                             Rank = 11,
                             Suit = 1
                         },
                         new
                         {
                             ID = 25,
+                            ImageURL = "/Assets/QS.png",
                             Rank = 12,
                             Suit = 1
                         },
                         new
                         {
                             ID = 26,
+                            ImageURL = "/Assets/KS.png",
                             Rank = 13,
                             Suit = 1
                         },
                         new
                         {
                             ID = 27,
+                            ImageURL = "/Assets/AC.png",
                             Rank = 1,
                             Suit = 3
                         },
                         new
                         {
                             ID = 28,
+                            ImageURL = "/Assets/2C.png",
                             Rank = 2,
                             Suit = 3
                         },
                         new
                         {
                             ID = 29,
+                            ImageURL = "/Assets/3C.png",
                             Rank = 3,
                             Suit = 3
                         },
                         new
                         {
                             ID = 30,
+                            ImageURL = "/Assets/4C.png",
                             Rank = 4,
                             Suit = 3
                         },
                         new
                         {
                             ID = 31,
+                            ImageURL = "/Assets/5C.png",
                             Rank = 5,
                             Suit = 3
                         },
                         new
                         {
                             ID = 32,
+                            ImageURL = "/Assets/6C.png",
                             Rank = 6,
                             Suit = 3
                         },
                         new
                         {
                             ID = 33,
+                            ImageURL = "/Assets/7C.png",
                             Rank = 7,
                             Suit = 3
                         },
                         new
                         {
                             ID = 34,
+                            ImageURL = "/Assets/8C.png",
                             Rank = 8,
                             Suit = 3
                         },
                         new
                         {
                             ID = 35,
+                            ImageURL = "/Assets/9C.png",
                             Rank = 9,
                             Suit = 3
                         },
                         new
                         {
                             ID = 36,
+                            ImageURL = "/Assets/10C.png",
                             Rank = 10,
                             Suit = 3
                         },
                         new
                         {
                             ID = 37,
+                            ImageURL = "/Assets/JC.png",
                             Rank = 11,
                             Suit = 3
                         },
                         new
                         {
                             ID = 38,
+                            ImageURL = "/Assets/QC.png",
                             Rank = 12,
                             Suit = 3
                         },
                         new
                         {
                             ID = 39,
+                            ImageURL = "/Assets/KC.png",
                             Rank = 13,
                             Suit = 3
                         },
                         new
                         {
                             ID = 40,
+                            ImageURL = "/Assets/AD.png",
                             Rank = 1,
                             Suit = 2
                         },
                         new
                         {
                             ID = 41,
+                            ImageURL = "/Assets/2D.png",
                             Rank = 2,
                             Suit = 2
                         },
                         new
                         {
                             ID = 42,
+                            ImageURL = "/Assets/3D.png",
                             Rank = 3,
                             Suit = 2
                         },
                         new
                         {
                             ID = 43,
+                            ImageURL = "/Assets/4D.png",
                             Rank = 4,
                             Suit = 2
                         },
                         new
                         {
                             ID = 44,
+                            ImageURL = "/Assets/5D.png",
                             Rank = 5,
                             Suit = 2
                         },
                         new
                         {
                             ID = 45,
+                            ImageURL = "/Assets/6D.png",
                             Rank = 6,
                             Suit = 2
                         },
                         new
                         {
                             ID = 46,
+                            ImageURL = "/Assets/7D.png",
                             Rank = 7,
                             Suit = 2
                         },
                         new
                         {
                             ID = 47,
+                            ImageURL = "/Assets/8D.png",
                             Rank = 8,
                             Suit = 2
                         },
                         new
                         {
                             ID = 48,
+                            ImageURL = "/Assets/9D.png",
                             Rank = 9,
                             Suit = 2
                         },
                         new
                         {
                             ID = 49,
+                            ImageURL = "/Assets/10D.png",
                             Rank = 10,
                             Suit = 2
                         },
                         new
                         {
                             ID = 50,
+                            ImageURL = "/Assets/JD.png",
                             Rank = 11,
                             Suit = 2
                         },
                         new
                         {
                             ID = 51,
+                            ImageURL = "/Assets/QD.png",
                             Rank = 12,
                             Suit = 2
                         },
                         new
                         {
                             ID = 52,
+                            ImageURL = "/Assets/KD.png",
                             Rank = 13,
                             Suit = 2
+                        },
+                        new
+                        {
+                            ID = 53,
+                            Rank = 13,
+                            Suit = 3
+                        },
+                        new
+                        {
+                            ID = 54,
+                            Rank = 13,
+                            Suit = 3
                         });
                 });
 
@@ -453,7 +519,15 @@ namespace SpeedWar.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("EmptyDecks");
+
+                    b.Property<int>("FirstCard");
+
                     b.Property<string>("Name");
+
+                    b.Property<bool>("PlayerTurn");
+
+                    b.Property<int>("SecondCard");
 
                     b.HasKey("ID");
 
@@ -463,32 +537,56 @@ namespace SpeedWar.Migrations
                         new
                         {
                             ID = 1,
-                            Name = "Discard"
+                            EmptyDecks = false,
+                            FirstCard = 0,
+                            Name = "Discard",
+                            PlayerTurn = false,
+                            SecondCard = 0
                         },
                         new
                         {
                             ID = 2,
-                            Name = "Computer"
+                            EmptyDecks = false,
+                            FirstCard = 0,
+                            Name = "Computer",
+                            PlayerTurn = false,
+                            SecondCard = 0
                         },
                         new
                         {
                             ID = 3,
-                            Name = "Clarice"
+                            EmptyDecks = false,
+                            FirstCard = 0,
+                            Name = "Clarice",
+                            PlayerTurn = false,
+                            SecondCard = 0
                         },
                         new
                         {
                             ID = 4,
-                            Name = "Shalom"
+                            EmptyDecks = false,
+                            FirstCard = 0,
+                            Name = "Shalom",
+                            PlayerTurn = false,
+                            SecondCard = 0
                         },
                         new
                         {
                             ID = 5,
-                            Name = "Xia"
+                            EmptyDecks = false,
+                            FirstCard = 0,
+                            Name = "Xia",
+                            PlayerTurn = false,
+                            SecondCard = 0
                         },
                         new
                         {
                             ID = 6,
-                            Name = "Gwen"
+                            EmptyDecks = false,
+                            FirstCard = 0,
+                            Name = "Gwen",
+                            PlayerTurn = false,
+                            SecondCard = 0
                         });
                 });
 
