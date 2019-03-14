@@ -35,7 +35,11 @@ connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
     if (card1Rank === card2Rank) {
         match = true;
     }
-
+    console.log(`match: ${match}, slap: ${slap}`);
+    console.log(`#1: ${card1Rank}, #2: ${card2Rank}`);
+    setTimeout(function () {
+        checkSlap();
+    }, 1000);
 })
 
 connection.start().then(function () {
@@ -47,15 +51,15 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
+
 document.getElementById("sendButton").addEventListener("click", function (event) {
     console.log("did a thing")
     event.preventDefault();
  });
 
-
 document.getElementById("first-card").addEventListener("click", function (event) {
     event.preventDefault();
-    slap =true;
+    slap = true;
     console.log("player slap");
     console.log("slap: ", slap);
     console.log("match: ", match);
@@ -71,33 +75,47 @@ document.getElementById("userDeck").addEventListener("click", function (event) {
     console.log("been clicked");
     event.preventDefault();
     slap = false;
-    //var secondRank = document.getElementById("li1").textContent;
-    //var secondSuit = document.getElementById("li2").textContent;
-    //console.log(secondSuit);
-    console.log("match: ", match);
-    console.log("slap: ", slap);
-    if (!match) {
-        playerFlip();
-    } else if (match && !slap) {
-        compSlap();
-    }
-    compFlip();
-    if (match && !slap) {
-        compSlap();
-    }
+    console.log(`BEFORE PLAYER FLIP`);
+    playerFlip();
+    console.log(`AFTER PLAYER FLIP`);
+    setTimeout(function () {
+        compFlip();
+    }, 1000);
 });
 
 function compFlip() {
-    console.log("compflip")
-    if (compDecksEmpty) {
-        console.log("comp decks empty");
-    }
-    else if (!match || (match && !slap)) {
-        console.log("inside compflip");
-        connection.invoke("ComputerFlip", userName).catch(function (err) {
-            return console.error(err.toString());
-        })
-    }
+    console.log("start compflip")
+    setTimeout(function () {
+        if (compDecksEmpty) {
+            console.log("comp decks empty");
+        }
+        else {
+            console.log("inside compflip");
+            connection.invoke("ComputerFlip", userName).catch(function (err) {
+                return console.error(err.toString());
+            })
+        }
+    }, 1000);
+};
+
+function checkSlap() {
+    console.log("start checkslap");
+    setTimeout(function () {
+        if (match && !slap) {
+            console.log("line 80");
+            compSlap();
+        }
+    }, 1000);
+    console.log("end checkslap");
+}
+
+function compSlap() {
+    console.log("compslap");
+
+    connection.invoke("Slap", userName, "computer").catch(function (err) {
+        return console.error(err.toString());
+    });
+    match = false;
 };
 
 function compSlap() {
@@ -111,8 +129,21 @@ function compSlap() {
 
 function playerFlip() {
     console.log("playerflip");
-    connection.invoke("PlayerFlip", userName).catch(function (err) {
-        return console.error(err.toString());
-    })
+    if (!match) {
+        connection.invoke("PlayerFlip", userName).catch(function (err) {
+            return console.error(err.toString());
+        })
+    } else {
+        checkSlap();
+    }
+
 };
+
+function endGame() {
+    document.getElementById("sendButton").disabled = true;
+    document.getElementById("first-card").disabled = true;
+    document.getElementById("second-card").disabled = true;
+    // call winner modal
+};
+
 
