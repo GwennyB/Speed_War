@@ -9,7 +9,6 @@ namespace SpeedWar.Models
     public class User
     {
         public int ID { get; set; }
-        [Required(ErrorMessage = "Please provide a name.")]
         public string Name { get; set; }
         public bool PlayerTurn { get; set; }
         public int FirstCard { get; set; }
