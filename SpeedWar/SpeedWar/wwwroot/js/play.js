@@ -3,7 +3,7 @@ console.log("I'm connected");
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 var pauseGame = true;
-document.getElementById("sendButton").disabled = true;
+document.getElementById("sendbutton").disabled = true;
 var slap = false;
 var match = false;
 var userName;
@@ -42,7 +42,7 @@ connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
 
 connection.start().then(function () {
     event.preventDefault(); 
-    document.getElementById("sendButton").disabled = false;
+    document.getElementById("sendbutton").disabled = false;
     userName = document.getElementById("player").textContent;
 })
     .catch(function (err) {
@@ -50,12 +50,12 @@ connection.start().then(function () {
 });
 
 
-document.getElementById("sendButton").addEventListener("click", function (event) {
+document.getElementById("sendbutton").addEventListener("click", function (event) {
     console.log("did a thing")
     event.preventDefault();
  });
 
-document.getElementById("first-card").addEventListener("click", function (event) {
+document.getElementById("userdeck").addEventListener("click", function (event) {
     event.preventDefault();
     slap = true;
     console.log("player slap");
@@ -84,15 +84,10 @@ document.getElementById("userDeck").addEventListener("click", function (event) {
 function compFlip() {
     console.log("start compflip")
     setTimeout(function () {
-        if (compDecksEmpty) {
-            console.log("comp decks empty");
-        }
-        else {
-            console.log("inside compflip");
-            connection.invoke("ComputerFlip", userName).catch(function (err) {
-                return console.error(err.toString());
-            })
-        }
+        console.log("inside compflip");
+        connection.invoke("ComputerFlip", userName).catch(function (err) {
+            return console.error(err.toString());
+        })
     }, 1000);
 };
 
@@ -138,7 +133,7 @@ function playerFlip() {
 };
 
 function endGame() {
-    document.getElementById("sendButton").disabled = true;
+    document.getElementById("sendbutton").disabled = true;
     document.getElementById("first-card").disabled = true;
     document.getElementById("second-card").disabled = true;
     // call winner modal
