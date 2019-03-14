@@ -20,7 +20,6 @@ label {
     border-radius: 15px
 }
 
-
 form {
     display: block;
     padding: 1em 1em 1em 1em;
@@ -59,4 +58,15 @@ button {
 
 .hidden {
     display: none
+}
+.instruction {
+    background-color: bisque;
+    width: 60vw;
+  
+    position: absolute;
+    top: 20vh;
+    left: 20vw;
+}
+.title{
+    font-weight:bold
 }
