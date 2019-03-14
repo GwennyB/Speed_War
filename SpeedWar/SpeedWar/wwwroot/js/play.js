@@ -12,19 +12,19 @@ connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
 
     console.log(card1Rank);
   
-    var li1 = document.getElementById("li1");
-    var li2 = document.getElementById("li2");
-    var li3 = document.getElementById("li3");
-    var li4 = document.getElementById("li4");
+    //var li1 = document.getElementById("li1");
+    //var li2 = document.getElementById("li2");
+    //var li3 = document.getElementById("li3");
+    //var li4 = document.getElementById("li4");
 
-    var DOM_img = document.createElement("img");
+    var DOM_img = document.getElementById("img1");
     DOM_img.src = card1Suit;
 
-    var dom_img = document.createElement("img");
+    var dom_img = document.getElementById("img2");
     dom_img.src = card2Suit;
 
-    li2.appendChild(DOM_img);
-    li4.appendChild(dom_img);
+    //li1.appendChild(DOM_img);
+    //li3.appendChild(dom_img);
     //li1.textContent = card1Rank;
     //li2.textContent = card1Suit;
     //li3.textContent = card2Rank;
@@ -45,9 +45,9 @@ document.getElementById("sendButton").addEventListener("click", function (event)
 
     playerTurn = true;
     var userName = document.getElementById("player").textContent;
-    var secondRank = document.getElementById("li1").textContent;
-    var secondSuit = document.getElementById("li2").textContent;
-    console.log(secondSuit);
+    //var secondRank = document.getElementById("li1").DOM_img;
+    //var secondSuit = document.getElementById("li2").textContent;
+    //console.log(secondSuit);
     connection.invoke("PlayerFlip", userName).catch(function (err) {
         return console.error(err.toString());
     });
