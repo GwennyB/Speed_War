@@ -29,3 +29,15 @@ h1{
     text-align:center;
 }
 
+#winner-page{
+    width: 60vw;
+    height: 60vh;
+    position: absolute;
+    top: 20vw;
+    left: 20vh;
+}
+
+.hidden{
+    display: none;
+}
+
