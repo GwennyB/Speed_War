@@ -7,6 +7,7 @@ document.getElementById("sendbutton").disabled = true;
 var slap = false;
 var match = false;
 var userName;
+var holdTime = 500;
 
 
 connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
@@ -26,7 +27,7 @@ connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
     console.log(`#1: ${card1Rank}, #2: ${card2Rank}`);
     setTimeout(function () {
         checkSlap();
-    }, 200);
+    }, holdTime);
 })
 
 connection.start().then(function () {
@@ -44,9 +45,12 @@ document.getElementById("sendbutton").addEventListener("click", function (event)
     event.preventDefault();
  });
 
-document.getElementById("userdeck").addEventListener("click", function (event) {
+document.getElementById("first-card").addEventListener("click", function (event) {
     event.preventDefault();
     slap = true;
+    setTimeout(function () {
+        document.getElementById("slap-page").hidden = false;
+    });
     console.log("player slap");
     console.log("slap: ", slap);
     console.log("match: ", match);
@@ -55,6 +59,9 @@ document.getElementById("userdeck").addEventListener("click", function (event) {
         match = false;
     }
     slap = false;
+    setTimeout(function () {
+        document.getElementById("slap-page").hidden = true;
+    });
 });
 
 
@@ -67,7 +74,7 @@ document.getElementById("userdeck").addEventListener("click", function (event) {
     console.log(`AFTER PLAYER FLIP`);
     setTimeout(function () {
         compFlip();
-    }, 200);
+    }, holdTime);
 });
 
 function compFlip() {
@@ -77,7 +84,7 @@ function compFlip() {
         connection.invoke("ComputerFlip", userName).catch(function (err) {
             return console.error(err.toString());
         })
-    }, 200);
+    }, holdTime);
 };
 
 function checkSlap() {
@@ -87,25 +94,21 @@ function checkSlap() {
             console.log("line 80");
             compSlap();
         }
-    }, 200);
+    }, holdTime);
     console.log("end checkslap");
 }
 
 function compSlap() {
     console.log("compslap");
-
+    setTimeout(function () {
+        document.getElementById("slap-page").hidden = false;
+    }, holdTime);
     connection.invoke("Slap", userName, "computer").catch(function (err) {
         return console.error(err.toString());
     });
-    match = false;
-};
-
-function compSlap() {
-    console.log("compslap");
-
-    connection.invoke("Slap", userName, "computer").catch(function (err) {
-        return console.error(err.toString());
-    });
+    setTimeout(function () {
+        document.getElementById("winner-page").hidden = true;
+    }, holdTime);
     match = false;
 };
 
