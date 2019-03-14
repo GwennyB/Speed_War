@@ -12,23 +12,12 @@ var userName;
 connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
     event.preventDefault(); 
 
-    //console.log(card1Rank);
-  
-    //var li1 = document.getElementById("li1");
-    //var li2 = document.getElementById("li2");
-    //var li3 = document.getElementById("li3");
-    //var li4 = document.getElementById("li4");
-
     var DOM_img = document.getElementById("img1");
     DOM_img.src = card1Suit;
 
     var dom_img = document.getElementById("img2");
     dom_img.src = card2Suit;
 
-    //li1.textContent = card1Rank;
-    //li2.textContent = card1Suit;
-    //li3.textContent = card2Rank;
-    //li4.textContent = card2Suit;
 
     if (card1Rank === card2Rank) {
         match = true;
@@ -138,7 +127,7 @@ connection.on("endGame", function (winner) {
     document.getElementById("sendbutton").disabled = true;
     document.getElementById("first-card").disabled = true;
     document.getElementById("second-card").disabled = true;
-    // call winner modal
+    document.getElementById("winner-page").display = block;
 });
 
 
