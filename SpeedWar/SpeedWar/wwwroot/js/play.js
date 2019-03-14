@@ -7,8 +7,6 @@ document.getElementById("sendButton").disabled = true;
 var slap = false;
 var match = false;
 var userName;
-var userDecksEmpty;
-var compDecksEmpty;
 
 
 connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
