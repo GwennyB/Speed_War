@@ -37,7 +37,7 @@ connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Sui
     console.log(`#1: ${card1Rank}, #2: ${card2Rank}`);
     setTimeout(function () {
         checkSlap();
-    }, 1000);
+    }, 200);
 })
 
 connection.start().then(function () {
@@ -69,7 +69,7 @@ document.getElementById("userdeck").addEventListener("click", function (event) {
 });
 
 
-document.getElementById("userDeck").addEventListener("click", function (event) {
+document.getElementById("userdeck").addEventListener("click", function (event) {
     console.log("been clicked");
     event.preventDefault();
     slap = false;
@@ -78,7 +78,7 @@ document.getElementById("userDeck").addEventListener("click", function (event) {
     console.log(`AFTER PLAYER FLIP`);
     setTimeout(function () {
         compFlip();
-    }, 1000);
+    }, 200);
 });
 
 function compFlip() {
@@ -88,7 +88,7 @@ function compFlip() {
         connection.invoke("ComputerFlip", userName).catch(function (err) {
             return console.error(err.toString());
         })
-    }, 1000);
+    }, 200);
 };
 
 function checkSlap() {
@@ -98,7 +98,7 @@ function checkSlap() {
             console.log("line 80");
             compSlap();
         }
-    }, 1000);
+    }, 200);
     console.log("end checkslap");
 }
 
@@ -132,11 +132,14 @@ function playerFlip() {
 
 };
 
-function endGame(winner) {
+connection.on("endGame", function (winner) {
+    event.preventDefault();
+    console.log(`winner is ${winner}`);
     document.getElementById("sendbutton").disabled = true;
     document.getElementById("first-card").disabled = true;
     document.getElementById("second-card").disabled = true;
     // call winner modal
-};
+});
+
 
 
