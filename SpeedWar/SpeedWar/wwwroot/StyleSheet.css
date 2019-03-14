@@ -1,10 +1,11 @@
 ﻿body {
-    background-color:whitesmoke;
+    background-color:papayawhip;
+
 }
 label {
     font-size: 10px;
     margin: 10px 20px 0px;
-    font-weight: 700px
+    font-weight:700px
 }
 
 .container {
@@ -14,9 +15,11 @@ label {
     float: left;
     padding: 10px 50px 10;
     background-image: url(Assets/cardwall.jpg);
+    background-position:center;
     margin: 2% 30%;
-    border-radius: 5px
+    border-radius: 15px
 }
+
 
 form {
     display: block;
@@ -25,7 +28,8 @@ form {
 
 #username {
     font-size: 30px;
-    font-height: 40px display: inline-block
+    font-height: 40px;
+    display: inline-block
 }
 
 button {
@@ -48,4 +52,8 @@ button {
     font-size: 26px;
     height: 10px;
     margin: 8em
+}
+.hidden{
+    display:none
+
 }
