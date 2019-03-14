@@ -132,7 +132,7 @@ function playerFlip() {
 
 };
 
-function endGame() {
+function endGame(winner) {
     document.getElementById("sendbutton").disabled = true;
     document.getElementById("first-card").disabled = true;
     document.getElementById("second-card").disabled = true;

@@ -63,50 +63,38 @@ namespace SpeedWar.Hubs
                 await SendCard(temp, username);
             }
 
-            await Task.Delay(1000);
 
-        }
-
-        private async Task<bool> CheckMatch(string username)
-        {
-            Card FirstCard = await _user.GetFirstCard(username);
-            Card SecondCard = await _user.GetSecondCard(username);
-            if (FirstCard.Rank == SecondCard.Rank) return true;
-            return false;
         }
 
         public async Task PlayerFlip(string username)
         {
             User player = await _user.GetUserAsync(username);
 
-                Card temp = await _deck.Flip(player.ID);
-                if (temp == null)
-                {
-                    await _deck.ResetDecks(player.ID);
-                    temp = await _deck.Flip(player.ID);
-                }
-                if (temp != null)
-                {
-                    await SendCard(temp, username);
-                }
+            Card temp = await _deck.Flip(player.ID);
+            if (temp == null)
+            {
+                await _deck.ResetDecks(player.ID);
+                temp = await _deck.Flip(player.ID);
+            }
+            if (temp != null)
+            {
+                await SendCard(temp, username);
+            }
 
-            await Task.Delay(1000);
         }
 
-
-        public async Task Slap (string playerName, string slapBy)
+        public async Task Slap(string playerName, string slapBy)
         {
 
-            //User player = await _user.GetUserAsync(playerName);
-            //User slapper = await _user.GetUserAsync(slapBy);
-            //Card FirstCard = await _user.GetFirstCard(playerName);
-            //Card SecondCard = await _user.GetSecondCard(playerName);
-            //if (FirstCard == SecondCard)
             {
                 await _deck.Slap(slapBy); // (slapper.ID);
-                await Clients.All.SendAsync("CompSlap");
             }
-            //return await _deck.CheckWinner(player.ID);
+            string loser = (slapBy == playerName) ? "computer" : playerName;
+            if (await CheckDecks(loser))
+            {
+                await Clients.All.SendAsync("endGame", slapBy);
+
+            }
         }
 
         public async Task<bool> CheckDecks(string username)
