@@ -22,10 +22,11 @@
         <form method="post">
             <label class="three" asp-for="Username"></label>
             <input id="username" asp-for="Username" />
-            <button type="submit">Start game!</button>
+            <button type="submit" onclick="responsiveVoice.speak('Start Game');" >Start game!</button>
 
         </form>
 
     </div>
 </body>
 </html>
+<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
