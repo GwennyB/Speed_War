@@ -48,18 +48,19 @@ namespace SpeedWar.Hubs
 
         public async Task ComputerFlip(string username)
         {
-            bool PlayerTurn = await _user.GetPlayerTurn(username);
+            User player = await _user.GetUserAsync(username);
+            bool playerTurn = player.PlayerTurn;
             Card FirstCard = await _user.GetFirstCard(username);
             Card SecondCard = await _user.GetSecondCard(username);
-            bool EmptyDecks = await _deck.EmptyDecks(2);
-            while ( PlayerTurn== false)
+            bool EmptyDecks = await _deck.EmptyDecks(player.ID);
+            while ( playerTurn == false)
             {
                 if (FirstCard.Rank == SecondCard.Rank)
                 {
                     await Task.Delay(1000);
-                    if (PlayerTurn == false)
+                    if (playerTurn == false)
                     {
-                        await Slap("computer");
+                        await Task.Delay(1000);
                     }
                 }
 
@@ -76,7 +77,8 @@ namespace SpeedWar.Hubs
                 }
                 else if (temp != null)
                 {
-                    SendCard(temp, username);
+                    await Task.Delay(4000);
+                    await SendCard(temp, username);
                 }
    
             }
@@ -84,53 +86,53 @@ namespace SpeedWar.Hubs
 
         public async Task PlayerFlip(string username)
         {
-            User CurrentUser = await _user.GetUserAsync(username);
-            bool PlayerTurn = await _user.GetPlayerTurn(username);
+            User player = await _user.GetUserAsync(username);
+            bool playerTurn = player.PlayerTurn;
             Card FirstCard = await _user.GetFirstCard(username);
             Card SecondCard = await _user.GetSecondCard(username);
-            bool EmptyDecks = await _deck.EmptyDecks(CurrentUser.ID);
+            bool EmptyDecks = await _deck.EmptyDecks(player.ID);
 
             
             if ((FirstCard.ID != 53 && SecondCard.ID != 54 && FirstCard.Rank == SecondCard.Rank))
             {
-                await Task.Delay(1000);
+                await Slap(player.Name, "computer"); 
             }
 
             else
             {
-                Card temp = await _deck.Flip(CurrentUser.ID);
+                Card temp = await _deck.Flip(player.ID);
                 if (temp == null)
                 {
                     await _deck.ResetDecks(2);
-                    temp = await _deck.Flip(CurrentUser.ID);
+                    temp = await _deck.Flip(player.ID);
                 }
                 else
                 {
-                    //await _user.UpdateSecondCard(username, FirstCard.ID);
-                    //await _user.UpdateFirstCard(username, temp.ID);
                     await SendCard(temp, username);
                 }
             }
 
-            if (PlayerTurn == true)
+            if ( playerTurn == true)
             {
                 await _user.UpdatePlayerTurn(username, false);
-                ComputerFlip(username);
             }
 
         }
 
 
-        public async Task Slap (string username)
+        public async Task Slap (string playerName, string slapBy)
         {
-            User CurrentUser = await _user.GetUserAsync(username);
-            bool PlayerTurn = await _user.GetPlayerTurn(username);
-            Card FirstCard = await _user.GetFirstCard(username);
-            Card SecondCard = await _user.GetSecondCard(username);
-            PlayerTurn = true;
+            if (slapBy != "computer")
+            {
+                await Clients.All.SendAsync("PauseGame");
+            }
+            await _user.UpdatePlayerTurn(playerName, true);
+            User slapper = await _user.GetUserAsync(slapBy);
+            Card FirstCard = await _user.GetFirstCard(playerName);
+            Card SecondCard = await _user.GetSecondCard(playerName);
             if (FirstCard == SecondCard)
             {
-                await _deck.Slap(CurrentUser.ID);
+                await _deck.Slap(slapper.ID);
             }
         }
 

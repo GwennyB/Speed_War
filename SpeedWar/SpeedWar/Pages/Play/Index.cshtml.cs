@@ -31,6 +31,7 @@ namespace SpeedWar.Pages.Play
                 Player = player;
                 await _userContext.UpdateFirstCard(player.Name, 53);
                 await _userContext.UpdateSecondCard(player.Name, 54);
+                await _userContext.UpdatePlayerTurn(player.Name, true);
                 await _deckCardContext.DealGameAsync(Player.ID);
             }
         }

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpeedWar.Data;
 
 namespace SpeedWar.Migrations
 {
     [DbContext(typeof(CardDbContext))]
-    partial class CardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190313232515_make-add-NA-cards")]
+    partial class makeaddNAcards
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
