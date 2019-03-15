@@ -8,16 +8,18 @@ var slap = false;
 var match = false;
 var userName;
 var holdTime = 500;
+var staleTest = "";
+var staleCount = 0;
+var stale = false;
 
-
-connection.on("ReceiveCard", function (card1Rank, card1Suit, card2Rank, card2Suit) {
+connection.on("ReceiveCard", function (card1Rank, card1Img, card2Rank, card2Img) {
     event.preventDefault(); 
 
     var DOM_img = document.getElementById("img1");
-    DOM_img.src = card1Suit;
+    DOM_img.src = card1Img;
 
     var dom_img = document.getElementById("img2");
-    dom_img.src = card2Suit;
+    dom_img.src = card2Img;
 
 
     if (card1Rank === card2Rank) {
@@ -48,37 +50,43 @@ document.getElementById("sendbutton").addEventListener("click", function (event)
 document.getElementById("first-card").addEventListener("click", function (event) {
     event.preventDefault();
     slap = true;
-    setTimeout(function () {
-        document.getElementById("slap-page").hidden = false;
-    });
+    $("#slap-page").toggleClass("hidden");
     console.log("player slap");
-    console.log("slap: ", slap);
-    console.log("match: ", match);
     if (match === true) {
         connection.invoke("Slap", userName, userName);
         match = false;
     }
     slap = false;
     setTimeout(function () {
-        document.getElementById("slap-page").hidden = true;
-    });
+        $("#slap-page").toggleClass("hidden");
+    }, holdTime*5);
 });
 
 
 document.getElementById("userdeck").addEventListener("click", function (event) {
-    console.log("been clicked");
     event.preventDefault();
+    console.log("user flip");
+    var DOM_img = document.getElementById("img1");
+    if (staleTest === DOM_img.src) {
+        staleCount++;
+        console.log("staleCount: ", staleCount);
+    }
+    else {
+        staleTest = DOM_img.src;
+    }
+    if (staleCount > 2) {
+        console.log("stalemate");
+        endGame("Nobody");
+    }
     slap = false;
-    console.log(`BEFORE PLAYER FLIP`);
     playerFlip();
-    console.log(`AFTER PLAYER FLIP`);
     setTimeout(function () {
         compFlip();
     }, holdTime);
 });
 
 function compFlip() {
-    console.log("start compflip")
+    console.log("comp flip")
     setTimeout(function () {
         console.log("inside compflip");
         connection.invoke("ComputerFlip", userName).catch(function (err) {
@@ -88,27 +96,26 @@ function compFlip() {
 };
 
 function checkSlap() {
-    console.log("start checkslap");
+    console.log("check slap");
     setTimeout(function () {
         if (match && !slap) {
             console.log("line 80");
             compSlap();
         }
     }, holdTime);
-    console.log("end checkslap");
 }
 
+
 function compSlap() {
-    console.log("compslap");
-    setTimeout(function () {
-        document.getElementById("slap-page").hidden = false;
-    }, holdTime);
+    console.log("comp slap");
+    $("#slap-page").toggleClass("hidden");
     connection.invoke("Slap", userName, "computer").catch(function (err) {
         return console.error(err.toString());
     });
     setTimeout(function () {
-        document.getElementById("winner-page").hidden = true;
-    }, holdTime);
+        $("#slap-page").toggleClass("hidden");
+    }, holdTime*5);
+
     match = false;
 };
 
@@ -126,11 +133,7 @@ function playerFlip() {
 
 connection.on("endGame", function (winner) {
     event.preventDefault();
-    console.log(`winner is ${winner}`);
-    document.getElementById("sendbutton").disabled = true;
-    document.getElementById("first-card").disabled = true;
-    document.getElementById("second-card").disabled = true;
-    document.getElementById("winner-page").display = block;
+    endGame(winner);
 });
 
 connection.on("collectCards", function (playerName, card) {
@@ -144,6 +147,17 @@ connection.on("collectCards", function (playerName, card) {
         document.getElementById("user-collection").src = card;
     }
 })
+
+function endGame(winner) {
+    console.log(`winner is ${winner}`);
+    document.getElementById("sendbutton").disabled = true;
+    document.getElementById("first-card").disabled = true;
+    document.getElementById("second-card").disabled = true;
+    document.getElementById("winner-page").textContent = winner;
+    $("#winner-page").toggleClass("hidden");
+}
+
+
 
 
 
