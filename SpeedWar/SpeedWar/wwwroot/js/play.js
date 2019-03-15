@@ -7,10 +7,23 @@ document.getElementById("sendbutton").disabled = true;
 var slap = false;
 var match = false;
 var userName;
-var holdTime = 500;
+var holdTime;
 var staleTest = "";
 var staleCount = 0;
 var stale = false;
+
+connection.start().then(function () {
+    event.preventDefault();
+    document.getElementById("sendbutton").disabled = true;
+    document.getElementById("first-card").disabled = true;
+    document.getElementById("second-card").disabled = true;
+    document.getElementById("easy-button").disabled = false;
+    document.getElementById("hard-button").disabled = false;
+    userName = document.getElementById("player").textContent;})
+    .catch(function (err) {
+        return console.error(err.toString());
+    });
+
 
 connection.on("ReceiveCard", function (card1Rank, card1Img, card2Rank, card2Img) {
     event.preventDefault(); 
@@ -32,19 +45,25 @@ connection.on("ReceiveCard", function (card1Rank, card1Img, card2Rank, card2Img)
     }, holdTime);
 })
 
-connection.start().then(function () {
-    event.preventDefault(); 
+
+document.getElementById("easy-button").addEventListener("click", function (event) {
+    event.preventDefault();
+    holdTime = 1500;
     document.getElementById("sendbutton").disabled = false;
-    userName = document.getElementById("player").textContent;
-})
-    .catch(function (err) {
-    return console.error(err.toString());
+    document.getElementById("first-card").disabled = false;
+    document.getElementById("second-card").disabled = false;
+    document.getElementById("easy-button").disabled = true;
+    document.getElementById("hard-button").disabled = true;
 });
 
-
-document.getElementById("sendbutton").addEventListener("click", function (event) {
-    console.log("did a thing")
+document.getElementById("hard-button").addEventListener("click", function (event) {
     event.preventDefault();
+    holdTime = 500;
+    document.getElementById("sendbutton").disabled = false;
+    document.getElementById("first-card").disabled = false;
+    document.getElementById("second-card").disabled = false;
+    document.getElementById("easy-button").disabled = true;
+    document.getElementById("hard-button").disabled = true;
  });
 
 document.getElementById("first-card").addEventListener("click", function (event) {
