@@ -14,20 +14,20 @@
         <img style="width:60px;height:100px" src="~/Assets/PNG/yellow_back.png" />
         <img style="width:60px;height:100px" id="computer-collection" src="~/Assets/PNG/null.jpg" />
     </div>
-  
+
     <div id="first-card">
-    <img id="img1" style="width:100%;height:auto" src="~/Assets/PNG/null.jpg" />
-</div>
+        <img id="img1" style="width:100%;height:auto" src="~/Assets/PNG/null.jpg" />
+    </div>
     <div id="second-card">
         <img id="img2" style="width:100%;height:auto" src="~/Assets/PNG/null.jpg" />
     </div>
     <div id="userdeck">
         <img style="width:60px;height:100px" src="~/Assets/PNG/blue_back.png" />
-        <img style="width:60px;height:100px" id="user-collection"src="~/Assets/PNG/null.jpg" />
+        <img style="width:60px;height:100px" id="user-collection" src="~/Assets/PNG/null.jpg" />
     </div>
 </div>
 <div id="winner-page" class="hidden">
-    <p><span id="winner-id">Player</span> wins! </p>
+    <p><span id="winner-id"></span> wins! </p>
     <button id="winner-button" asp-page="Play/Index">Play Again?</button>
 </div>
 <div id="slap-page" class="hidden">
@@ -35,5 +35,9 @@
 </div>
 
 
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/play.js"></script>
