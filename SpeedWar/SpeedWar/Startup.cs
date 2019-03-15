@@ -32,7 +32,8 @@ namespace SpeedWar
             services.AddMvc();
             services.AddSignalR();
             services.AddDbContext<CardDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("PresentationConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("ProductionConnection")));
+
             services.AddScoped<IDeckCardManager, DeckCardMgmtSvc>();
             services.AddScoped<IUserManager, UserMgmtSvc>();
 

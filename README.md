@@ -1,5 +1,5 @@
 # Introduction 
-Speed War emulates the card game of the same name that pits the user (player) against the computer. It uses web sockets (SignalR) to maintain an open connection and constant client-server communication; that is, the user does not need to refresh the page to see game status updates since they are delivered and rendered real-time.
+Speed War emulates the card game of the same name that pits the user (player) against the computer. It uses web sockets (SignalR) to maintain an open connection and constant client-server communication; that is, the user does not need to refresh the page to see game status updates since they are delivered and rendered real-time.  
 Upon game start, the user and computer begin taking turns flipping cards from their play decks into a common discard pile. When the top 2 cards match in rank, the computer and player can "slap" the card pile to claim all the cards in the pile. The next round begins with the winner flipping the top card of their deck. Game play continues until either the player of the computer is out of cards. 
 
 ## Getting Started
@@ -18,11 +18,19 @@ The application is ready to run via your local/live server or your chosen deploy
 
 ### Tests
 The test suite is built in xUnit. Once the app is built as described above, all tests can be run using the 'Run All' command in the Test Explorer.  
-
+Tests include:
+- Getters and Setters of all models.
+- CRUD tests of all methods in the User Service and the DeckCard Service.
 
 ## Architecture
 
-![db schema](assets/schema.png)  
+![db schema](assets/schema.png)
+- User: Users are created upon login. They a primary key of ID, and a property of name.
+- Deck: Decks are created when a new user is created. Decks contain a Primary Key of ID, and properties of UserID and Deck Type. Deck Type is an enum containing Discard, Play, and Collect.
+- DeckCard: DeckCard is a join table that connects Cards and Decks. It has no properties, but has a composite key of DeckID and CardID.
+- Card: Cards have a suit and a rank based on a standard deck of 52 cards. They also have a Primary Key of ID. They exist in the database, and are readonly. Players will never create, update or delete a card.  
+
+
 
 
 ## Credit & Acknowledgement
@@ -33,7 +41,7 @@ This project is a collaborative effort by
   - Gwen Zubatch: https://github.com/GwennyB  
 
 Third party content:  
-TODO: TBD
+- [SignalR](https://dotnet.microsoft.com/apps/aspnet/real-time)
 
 
 ## Contribute

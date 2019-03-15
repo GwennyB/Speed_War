@@ -25,6 +25,10 @@ namespace SpeedWar.Models.Services
         /// <returns> user associated with submitted name </returns>
         public async Task<User> GetUserAsync(string name)
         {
+            if (name == null)
+            {
+                name = "Default";
+            }
             User user = await _context.Users.FirstOrDefaultAsync(s => s.Name.ToLower() == name.ToLower());
 
             if (user == null)

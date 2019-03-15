@@ -12,54 +12,154 @@ namespace UnitTests
 {
     public class UsersTests
     {
+        
+         /// <summary>
+        /// getter-ID
+        /// </summary>
         [Fact]
-        public void IDGetSet()
+        public void IDGet()
         {
             User user = new User();
             user.ID = 1;
             Assert.Equal(1, user.ID);
         }
 
+        /// <summary>
+        /// setter-ID
+        /// </summary>
         [Fact]
-        public void NameGetSet()
+        public void IDSet()
+        {
+            User user = new User();
+            user.ID = 1;
+            user.ID = 2;
+            Assert.Equal(2, user.ID);
+        }
+
+        /// <summary>
+        /// getter-Name
+        /// </summary>
+        [Fact]
+        public void NameGet()
         {
             User user = new User();
             user.Name = "Test";
             Assert.Equal("Test", user.Name);
         }
 
+
+        /// <summary>
+        /// setter-Name
+        /// </summary>
         [Fact]
-        public void PlayerTurnGetSet()
+        public void NameSet()
+        {
+            User user = new User();
+            user.Name = "Test";
+            user.Name = "NewTest";
+            Assert.Equal("NewTest", user.Name);
+        }
+
+        /// <summary>
+        /// getter-PlayerTurn
+        /// </summary>
+        [Fact]
+        public void PlayerTurnGet()
         {
             User user = new User();
             user.PlayerTurn = true;
             Assert.True(user.PlayerTurn);
         }
 
+
+        /// <summary>
+        /// setter-PlayerTurn
+        /// </summary>
         [Fact]
-        public void FirstCardGetSet()
+        public void PlayerTurnSet()
+        {
+            User user = new User();
+            user.PlayerTurn = true;
+            user.PlayerTurn = false;
+            Assert.False(user.PlayerTurn);
+        }
+
+
+        /// <summary>
+        /// getter-FirstCard
+        /// </summary>
+        [Fact]
+        public void FirstCardGet()
         {
             User user = new User();
             user.FirstCard = 99;
             Assert.Equal(99, user.FirstCard);
         }
 
+
+        /// <summary>
+        /// setter-FirstCard
+        /// </summary>
         [Fact]
-        public void SecondCardGetSet()
+        public void FirstCardSet()
+        {
+            User user = new User();
+            user.FirstCard = 99;
+            user.FirstCard = 9;
+            Assert.Equal(9, user.FirstCard);
+        }
+
+
+        /// <summary>
+        /// getter-SecondCard
+        /// </summary>
+        [Fact]
+        public void SecondCardGet()
         {
             User user = new User();
             user.SecondCard = 99;
             Assert.Equal(99, user.SecondCard);
         }
 
+        /// <summary>
+        /// setter-SecondCard
+        /// </summary>
         [Fact]
-        public void EmptyDeckGetSet()
+        public void SecondCardSet()
+        {
+            User user = new User();
+            user.SecondCard = 99;
+            user.SecondCard = 19;
+            Assert.Equal(19, user.SecondCard);
+        }
+
+        /// <summary>
+        /// getter-EmptyDeck
+        /// </summary>
+        [Fact]
+        public void EmptyDeckGet()
         {
             User user = new User();
             user.EmptyDecks = true;
             Assert.True(user.EmptyDecks);
         }
 
+        /// <summary>
+        /// setter-EmptyDeck
+        /// </summary>
+        [Fact]
+        public void EmptyDeckSet()
+        {
+            User user = new User();
+            user.EmptyDecks = true;
+            user.EmptyDecks = false;
+            Assert.False(user.EmptyDecks);
+        }
+
+        /// <summary>
+        /// test can get an existing user
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CanGetExistingUser()
         {
@@ -74,6 +174,10 @@ namespace UnitTests
             }
         }
 
+        /// <summary>
+        /// can get new user(create account)
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CanGetNewUser()
         {
@@ -87,6 +191,10 @@ namespace UnitTests
             }
         }
 
+        /// <summary>
+        /// test can create play deck
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CanCreatePlayDeck()
         {
@@ -102,6 +210,10 @@ namespace UnitTests
             }
         }
 
+        /// <summary>
+        /// test can create collect deck
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CanCreateCollectDeck()
         {
@@ -117,6 +229,11 @@ namespace UnitTests
             }
         }
 
+
+        /// <summary>
+        /// test can update firstcard
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CanUpdateFirstCard()
         {
@@ -133,6 +250,10 @@ namespace UnitTests
             }
         }
 
+        /// <summary>
+        /// test can update second card
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CanUpdateSecondCard()
         {
@@ -148,7 +269,11 @@ namespace UnitTests
                 Assert.Equal(1, user.SecondCard);
             }
         }
-
+       
+        /// <summary>
+        /// test can update player turn
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CanUpdateUserTurn()
         {
