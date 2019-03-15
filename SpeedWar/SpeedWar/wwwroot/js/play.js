@@ -60,7 +60,6 @@ document.getElementById("easy-button").addEventListener("click", function (event
 document.getElementById("hard-button").addEventListener("click", function (event) {
     event.preventDefault();
     holdTime = 500;
-    document.getElementById("sendbutton").disabled = false;
     document.getElementById("first-card").disabled = false;
     document.getElementById("second-card").disabled = false;
     document.getElementById("easy-button").disabled = true;
@@ -170,10 +169,11 @@ connection.on("collectCards", function (playerName, card) {
 
 function endGame(winner) {
     console.log(`winner is ${winner}`);
-    document.getElementById("sendbutton").disabled = true;
     document.getElementById("first-card").disabled = true;
-    document.getElementById("second-card").disabled = true;
-    document.getElementById("winner-page").textContent = winner;
+    document.getElementById("userdeck").disabled = true;
+    document.getElementById("easy-button").disabled = false;
+    document.getElementById("hard-button").disabled = false;
+    document.getElementById("winner-id").textContent = winner;
     $("#winner-page").toggleClass("hidden");
 }
 
