@@ -59,6 +59,12 @@ namespace SpeedWar.Models.Services
             return user;
         }
 
+        /// <summary>
+        /// get 'FirstCard' property from specified user
+        /// 'FirstCard' is the CardID of the top discard card for this user's game
+        /// </summary>
+        /// <param name="username"> username of user </param>
+        /// <returns> card at top of this user's game discard pile </returns>
         public async Task<Card> GetFirstCard(string username)
         {
 
@@ -68,6 +74,12 @@ namespace SpeedWar.Models.Services
             return card;
         }
 
+        /// <summary>
+        /// get 'SecondCard' property from specified user
+        /// 'SecondCard' is the CardID of the second-from-top discard card for this user's game
+        /// </summary>
+        /// <param name="username"> username of user </param>
+        /// <returns> card at second-from-top of this user's game discard pile </returns>
         public async Task<Card> GetSecondCard(string username)
         {
             var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
@@ -75,11 +87,12 @@ namespace SpeedWar.Models.Services
             return card;
         }
 
-        public async Task<bool> GetPlayerTurn(string username)
-        {
-            return (await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower())).PlayerTurn;
-        }
-
+        /// <summary>
+        /// updates the CardID in the 'FirstCard' property on a user
+        /// </summary>
+        /// <param name="username"> username of user whose 'FirstCard' property needs updating </param>
+        /// <param name="cardID"> new CardID to save to 'FirstCard' property </param>
+        /// <returns> completed task </returns>
         public async Task UpdateFirstCard(string username, int cardID)
         {
             var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
@@ -88,6 +101,12 @@ namespace SpeedWar.Models.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// updates the CardID in the 'SecondCard' property on a user
+        /// </summary>
+        /// <param name="username"> username of user whose 'SecondCard' property needs updating </param>
+        /// <param name="cardID"> new CardID to save to 'SecondCard' property </param>
+        /// <returns> completed task </returns>
         public async Task UpdateSecondCard(string username, int cardID)
         {
             var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
@@ -96,12 +115,5 @@ namespace SpeedWar.Models.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePlayerTurn(string username, bool turn)
-        {
-            var query = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower() == username.ToLower());
-            query.PlayerTurn = turn;
-            _context.Users.Update(query);
-            await _context.SaveChangesAsync();
-        }
     }
 }

@@ -3,7 +3,8 @@ console.log("I'm connected");
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/PlayHub").build();
 var pauseGame = true;
-document.getElementById("sendbutton").disabled = true;
+document.getElementById("easy-button").disabled = true;
+document.getElementById("hard-button").disabled = true;
 var slap = false;
 var match = false;
 var userName;
@@ -12,11 +13,12 @@ var staleTest = "";
 var staleCount = 0;
 var stale = false;
 
+// game initial setup
+// turns off game listeners
 connection.start().then(function () {
     event.preventDefault();
-    document.getElementById("sendbutton").disabled = true;
     document.getElementById("first-card").disabled = true;
-    document.getElementById("second-card").disabled = true;
+    document.getElementById("userdeck").disabled = true;
     document.getElementById("easy-button").disabled = false;
     document.getElementById("hard-button").disabled = false;
     userName = document.getElementById("player").textContent;})
@@ -49,9 +51,8 @@ connection.on("ReceiveCard", function (card1Rank, card1Img, card2Rank, card2Img)
 document.getElementById("easy-button").addEventListener("click", function (event) {
     event.preventDefault();
     holdTime = 1500;
-    document.getElementById("sendbutton").disabled = false;
     document.getElementById("first-card").disabled = false;
-    document.getElementById("second-card").disabled = false;
+    document.getElementById("userdeck").disabled = false;
     document.getElementById("easy-button").disabled = true;
     document.getElementById("hard-button").disabled = true;
 });
