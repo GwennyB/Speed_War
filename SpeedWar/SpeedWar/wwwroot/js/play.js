@@ -55,6 +55,7 @@ document.getElementById("easy-button").addEventListener("click", function (event
     document.getElementById("userdeck").disabled = false;
     document.getElementById("easy-button").disabled = true;
     document.getElementById("hard-button").disabled = true;
+    $(".diff-button").toggleClass("hidden");
 });
 
 document.getElementById("hard-button").addEventListener("click", function (event) {
