@@ -65,6 +65,7 @@ document.getElementById("hard-button").addEventListener("click", function (event
     document.getElementById("second-card").disabled = false;
     document.getElementById("easy-button").disabled = true;
     document.getElementById("hard-button").disabled = true;
+    $(".diff-button").toggleClass("hidden");
  });
 
 document.getElementById("first-card").addEventListener("click", function (event) {
@@ -79,7 +80,7 @@ document.getElementById("first-card").addEventListener("click", function (event)
     slap = false;
     setTimeout(function () {
         $("#slap-page").toggleClass("hidden");
-    }, holdTime*5);
+    }, holdTime*1.5);
 });
 
 
@@ -134,7 +135,7 @@ function compSlap() {
     });
     setTimeout(function () {
         $("#slap-page").toggleClass("hidden");
-    }, holdTime*5);
+    }, holdTime*1.5);
 
     match = false;
 };

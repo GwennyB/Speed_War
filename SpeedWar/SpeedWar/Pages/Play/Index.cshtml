@@ -4,8 +4,10 @@
 }
 
 <link rel="stylesheet" type="text/css" href="~/Play.css">
-<button id="easy-button" class="diff-button"> Easy </button>
-<button id="hard-button" class="diff-button"> Hard </button>
+<div id="buttons">
+    <button id="easy-button" class="diff-button"> Easy </button>
+    <button id="hard-button" class="diff-button"> Hard </button>
+</div>
 
 @*DO NOT DELETE ME... I'M IMPORTANT!!!*@
 <p id="player" class="hidden">@Model.Player.Name</p>
@@ -28,8 +30,8 @@
 </div>
 <div id="winner-page" class="hidden">
     <p><span id="winner-id"></span> wins! </p>
-    <form asp-action="get">        
-        <button id="winner-button" asp-page="Index">Play Again?</button>
+    <form>        
+        <button id="winner-button" asp-page="/Index">Play Again?</button>
     </form>
 </div>
 <div id="slap-page" class="hidden">

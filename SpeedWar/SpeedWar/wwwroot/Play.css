@@ -27,28 +27,44 @@ h1{
 
 #deck{
     text-align:center;
+    margin-top: 50px;
 }
 
-#winner-page{
-    width: 60vw;
-    height: 60vh;
+
+#slap-page, #winner-page {
+    width: 40vw;
+    height: 30vh;
     position: absolute;
-    top: 20vw;
-    left: 20vh;
-    background-color: bisque;
-}
-#slap-page {
-    width: 60vw;
-    height: 60vh;
-    position: absolute;
-    top: 20vw;
-    left: 20vh;
-    background-color: bisque;
-}
-#slap-page {
+    top: 35vh;
+    left: 30vw;
+    background-color: dodgerblue;
     font-size: 3em;
+    font-family: sans-serif;
+    text-align: center;
+    border-radius: 10px;
+    opacity: .9;
+
 }
 
+    #winner-page button {
+        background-color: white;
+        border: none;
+        width: 10vw;
+        margin: 10px;
+        border-radius: 5px;
+    }
+
+.diff-button {
+    background-color: dodgerblue;
+    border: none;
+    width: 10vw;
+    margin: 10px;
+    border-radius: 5px;
+}
+#buttons {
+    display: flex;
+    justify-content: center;
+}
 .hidden{
     display: none;
 }
