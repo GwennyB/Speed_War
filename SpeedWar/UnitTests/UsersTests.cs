@@ -12,8 +12,8 @@ namespace UnitTests
 {
     public class UsersTests
     {
-        
-         /// <summary>
+
+        /// <summary>
         /// getter-ID
         /// </summary>
         [Fact]
@@ -61,31 +61,6 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// getter-PlayerTurn
-        /// </summary>
-        [Fact]
-        public void PlayerTurnGet()
-        {
-            User user = new User();
-            user.PlayerTurn = true;
-            Assert.True(user.PlayerTurn);
-        }
-
-
-        /// <summary>
-        /// setter-PlayerTurn
-        /// </summary>
-        [Fact]
-        public void PlayerTurnSet()
-        {
-            User user = new User();
-            user.PlayerTurn = true;
-            user.PlayerTurn = false;
-            Assert.False(user.PlayerTurn);
-        }
-
-
-        /// <summary>
         /// getter-FirstCard
         /// </summary>
         [Fact]
@@ -131,29 +106,6 @@ namespace UnitTests
             user.SecondCard = 99;
             user.SecondCard = 19;
             Assert.Equal(19, user.SecondCard);
-        }
-
-        /// <summary>
-        /// getter-EmptyDeck
-        /// </summary>
-        [Fact]
-        public void EmptyDeckGet()
-        {
-            User user = new User();
-            user.EmptyDecks = true;
-            Assert.True(user.EmptyDecks);
-        }
-
-        /// <summary>
-        /// setter-EmptyDeck
-        /// </summary>
-        [Fact]
-        public void EmptyDeckSet()
-        {
-            User user = new User();
-            user.EmptyDecks = true;
-            user.EmptyDecks = false;
-            Assert.False(user.EmptyDecks);
         }
 
         /// <summary>
@@ -246,7 +198,7 @@ namespace UnitTests
                 User user = await svc.GetUserAsync("test");
                 user.FirstCard = 1;
                 await svc.UpdateFirstCard("test", 1);
-                Assert.Equal(1, user.FirstCard);    
+                Assert.Equal(1, user.FirstCard);
             }
         }
 
@@ -267,26 +219,6 @@ namespace UnitTests
                 user.SecondCard = 1;
                 await svc.UpdateFirstCard("test", 1);
                 Assert.Equal(1, user.SecondCard);
-            }
-        }
-       
-        /// <summary>
-        /// test can update player turn
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task CanUpdateUserTurn()
-        {
-            DbContextOptions<CardDbContext> options = new DbContextOptionsBuilder<CardDbContext>().UseInMemoryDatabase("TestUserCards").Options;
-
-            using (CardDbContext context = new CardDbContext(options))
-            {
-                UserMgmtSvc svc = new UserMgmtSvc(context);
-
-                User user = await svc.GetUserAsync("test");
-                user.PlayerTurn = true;
-                await svc.UpdatePlayerTurn("test", false);
-                Assert.False(user.PlayerTurn);
             }
         }
 
