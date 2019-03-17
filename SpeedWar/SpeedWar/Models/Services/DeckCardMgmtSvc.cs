@@ -177,10 +177,7 @@ namespace SpeedWar.Models.Services
         }
 
 
-        private void EndGame(int ID)
-        {
-            throw new NotImplementedException();
-        }
+
 
         /// <summary>
         /// RESET: Moves all cards from specified player's 'Collect' deck to same player's 'Play' deck (used to reset decks when 'Play' deck runs empty)
