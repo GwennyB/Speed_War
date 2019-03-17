@@ -11,63 +11,123 @@ namespace SpeedWar.Hubs
 {
     public class PlayHub : Hub
     {
-        private IDeckCardManager _deckCardManager;
-        private IUserManager _userManager;
-
-        public bool PlayerTurn { get; set; }
-        public User CurrentUser { get; set; }
-        public Card FirstCard { get; set; }
-        public Card SecondCard { get; set; }
-
-
-
+        private IDeckCardManager _deck;
+        private IUserManager _user;
+        /// <summary>
+        /// create a PlayHub constructor
+        /// </summary>
+        /// <param name="deckCardManager">IDeckCardManager</param>
+        /// <param name="userManager">IuserManger</param>
         public PlayHub(IDeckCardManager deckCardManager, IUserManager userManager)
         {
-            _deckCardManager = deckCardManager;
-            _userManager = userManager;
-            PlayerTurn = true;
+            _deck = deckCardManager;
+            _user = userManager;
         }
 
-        public async Task Intro(string username)
+        /// <summary>
+        /// send two cards eventually from player side and computer side to play.js and play.js can use the cards to render them on the page
+        /// </summary>
+        /// <param name="temp">container temp card will be used when switch two cards </param>
+        /// <param name="username">player's name</param>
+        /// <returns></returns>
+        public async Task SendCard(Card temp, string username)
         {
-            CurrentUser = await _userManager.GetUserAsync(username);
-        }
-
-
-
-
-        //TO-DO: Scaffold PlayHub
-        public async Task SendCard(string card1Rank, string card1Suit, string card2Rank, string card2Suit)
-        {
-            await Clients.All.SendAsync("RecieveCard", card1Rank, card1Suit, card2Rank, card2Suit);
-        }
-
-        public async Task ComputerFlip()
-        {
-            while (PlayerTurn == false)
-            {
-                SecondCard = FirstCard;
-                FirstCard = await _deckCardManager.Flip(2);
-                await SendCard(FirstCard.Rank.ToString(), FirstCard.Suit.ToString(), SecondCard.Rank.ToString(), SecondCard.Suit.ToString());
-            }
-        }
-
-        public async Task PlayerFlip(string secondRank, string secondSuit, string userName)
-        {
-            User user = await _userManager.GetUserAsync(userName);
-            FirstCard = await _deckCardManager.Flip(user.ID);
+            Card FirstCard = await _user.GetFirstCard(username);
+            Card SecondCard = await _user.GetSecondCard(username);
+            SecondCard = FirstCard;
+            FirstCard = temp;
+            await _user.UpdateSecondCard(username, SecondCard.ID);
+            await _user.UpdateFirstCard(username, FirstCard.ID);
 
             string card1Rank = "null";
-            string card1Suit = "null";
-            if (FirstCard != null)
+            string card1Img = "null";
+            string card2Rank = "null";
+            string card2Img = "null";
+            if (FirstCard.ID != 53)
             {
+                card1Img = FirstCard.ImageURL;
                 card1Rank = FirstCard.Rank.ToString();
-                card1Suit = FirstCard.Suit.ToString();
+            }
+            if (SecondCard.ID != 54)
+            {
+                card2Img = SecondCard.ImageURL;
+                card2Rank = SecondCard.Rank.ToString();
+            }
+            await Clients.All.SendAsync("ReceiveCard", card1Rank, card1Img, card2Rank, card2Img);
+        }
+        /// <summary>
+        /// deck flip the computer side card, if card not exsit we grab the card from collection pile and flip it 
+        /// </summary>
+        /// <param name="username">player's name</param>
+        /// <returns></returns>
+        public async Task ComputerFlip(string username)
+        {
+            User player = await _user.GetUserAsync(username);
+
+            Card temp = await _deck.Flip(2);
+            if (temp == null)
+            {
+                await _deck.ResetDecks(2);
+                temp = await _deck.Flip(2);
+            }
+            if (temp != null)
+            {
+                await SendCard(temp, username);
             }
 
-            string card2Rank = secondRank;
-            string card2Suit = secondSuit;
-            await SendCard(card1Rank, card1Suit, card2Rank, card2Suit);
+
         }
+        /// <summary>
+        /// deck will flip the card by user's ID if the card does not exsit, will grab the collection pile to flip the card 
+        /// </summary>
+        /// <param name="username">player's name</param>
+        /// <returns></returns>
+        public async Task PlayerFlip(string username)
+        {
+            User player = await _user.GetUserAsync(username);
+
+            Card temp = await _deck.Flip(player.ID);
+            if (temp == null)
+            {
+                await _deck.ResetDecks(player.ID);
+                temp = await _deck.Flip(player.ID);
+            }
+            if (temp != null)
+            {
+                await SendCard(temp, username);
+            }
+
+        }
+        /// <summary>
+        /// when two cards(from computer side and user side) have same number, either computer or player can do slap,whoever slap quicker will collect all the cards from deck
+        /// </summary>
+        /// <param name="playerName">player/user's name</param>
+        /// <param name="slapBy">username of player with verified 'slap'</param>
+        /// <returns></returns>
+        public async Task Slap(string playerName, string slapBy)
+        {
+            string card = (await _user.GetFirstCard(playerName)).ImageURL;
+            {
+                await _deck.Slap(slapBy); // (slapper.ID);
+            }
+            await Clients.All.SendAsync("collectCards", slapBy, card);
+            string loser = (slapBy == playerName) ? "computer" : playerName;
+            if (await CheckDecks(loser))
+            {
+                await Clients.All.SendAsync("endGame", slapBy);
+
+            }
+        }
+        /// <summary>
+        /// check user's deck see if it is empty( get player by username and pass in the player's ID to check if that player's deck is empty)
+        /// </summary>
+        /// <param name="username">username</param>
+        /// <returns>boolean</returns>
+        public async Task<bool> CheckDecks(string username)
+        {
+            var player = await _user.GetUserAsync(username);
+            return await _deck.EmptyDecks(player.ID);
+        }
+
     }
 }

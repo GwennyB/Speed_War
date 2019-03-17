@@ -6,15 +6,66 @@ h1{
     text-align:center;
 }
 #first-card {
+    position: absolute;
     display: inline-block;
-    height: 350px;
-    width: 200px;
-    border: 3px solid grey;
+    height: 200px;
+    width: 100px;
+    margin-top: -2.5em;
 }
 
 #second-card {
     display: inline-block;
-    height: 350px;
-    width: 200px;
-    border: 3px solid grey;
+    height: 200px;
+    width: 100px;
+    margin-left: 2em;
+    margin-top: 3.5em;
 }
+
+#img1{
+    padding-top:6em;
+}
+
+#deck{
+    text-align:center;
+    margin-top: 50px;
+}
+
+
+#slap-page, #winner-page {
+    width: 40vw;
+    height: 30vh;
+    position: absolute;
+    top: 35vh;
+    left: 30vw;
+    background-color: dodgerblue;
+    font-size: 3em;
+    font-family: sans-serif;
+    text-align: center;
+    border-radius: 10px;
+    opacity: .9;
+
+}
+
+    #winner-page button {
+        background-color: white;
+        border: none;
+        width: 10vw;
+        margin: 10px;
+        border-radius: 5px;
+    }
+
+.diff-button {
+    background-color: dodgerblue;
+    border: none;
+    width: 10vw;
+    margin: 10px;
+    border-radius: 5px;
+}
+#buttons {
+    display: flex;
+    justify-content: center;
+}
+.hidden{
+    display: none;
+}
+

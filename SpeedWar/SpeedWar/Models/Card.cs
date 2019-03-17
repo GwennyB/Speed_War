@@ -10,6 +10,7 @@ namespace SpeedWar.Models
         public int ID { get; set; }
         public Suit Suit { get; set; }
         public Rank Rank { get; set; }
+        public string ImageURL { get; set; }
     }
 
     public enum Suit
@@ -17,11 +18,13 @@ namespace SpeedWar.Models
         hearts,
         spades,
         diamonds,
-        clubs
+        clubs,
+        NA = 0
     }
 
     public enum Rank
     {
+        NA = 0,
         Ace = 1,
         Two = 2,
         Three = 3,

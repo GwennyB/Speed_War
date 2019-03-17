@@ -29,23 +29,25 @@ namespace SpeedWar.Pages.Play
             if (GameStart == true)
             {
                 Player = player;
+                await _userContext.UpdateFirstCard(player.Name, 53);
+                await _userContext.UpdateSecondCard(player.Name, 54);
                 await _deckCardContext.DealGameAsync(Player.ID);
             }
         }
 
-        /// <summary>
-        /// Takes in the player's user ID. Find's the first card in that player's deck. Changes that card's location to the discard pile. Updates the card. If card is null, calls EndGame method. 
-        /// </summary>
-        /// <param name="userID">the id of the user playing</param>
-        public async Task OnPost()
-        {
+        ///// <summary>
+        ///// Takes in the player's user ID. Find's the first card in that player's deck. Changes that card's location to the discard pile. Updates the card. If card is null, calls EndGame method. 
+        ///// </summary>
+        ///// <param name="userID">the id of the user playing</param>
+        //public async Task OnPost()
+        //{
 
-        }
+        //}
 
 
-        private void EndGame(string v)
-        {
-            throw new NotImplementedException();
-        }
+        //private void EndGame(string v)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
