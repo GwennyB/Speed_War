@@ -7,7 +7,7 @@ namespace UnitTests
     public class CardsTests
     {
 
-     
+
         /// <summary>
         /// getter-ID
         /// </summary>
