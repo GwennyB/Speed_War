@@ -1,5 +1,5 @@
 # Introduction 
-(Speed War)[https://speedwar.azurewebsites.net/]
+[Speed War](https://speedwar.azurewebsites.net/)  
 Speed War emulates the card game of the same name that pits the user (player) against the computer. It uses web sockets (SignalR) to maintain an open connection and constant client-server communication; that is, the user does not need to refresh the page to see game status updates since they are delivered and rendered real-time.  
 Upon game start, the user and computer begin taking turns flipping cards from their 'play' decks into a common 'discard' deck. When the top 2 cards match in rank, the computer and player can 'slap' the 'discard' deck to claim all the cards in the pile, which are then moved to that player's 'collect' deck. The next round begins with the winner flipping the top card of their deck. Game play continues until either player 'slaps' successfully when the other player's decks are out of cards. 
 
